@@ -1,3 +1,19 @@
+import re
+
+
+def regex(_dict: dict[str, str], pattern: str) -> bool:
+    if not _dict:
+        return False
+
+    p = re.compile(pattern)
+
+    for key in _dict.keys():
+        if p.findall(_dict[key]):
+            return True
+    
+    return False
+
+
 def hasKey(_dict: dict, content: str):
     return content in _dict
 

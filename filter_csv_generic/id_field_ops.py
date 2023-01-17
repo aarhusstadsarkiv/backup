@@ -1,6 +1,24 @@
-def id_field_contains(fieldname: str, content: str) -> bool:
+import re
+
+
+def regex(fieldname: str, pattern: str) -> bool:
 
     fieldname = fieldname.split(";")[1]
+
+    if not fieldname:
+        return False
+
+    p = re.compile(pattern)
+
+    if p.findall(fieldname):
+        return True
+    
+    return False
+
+
+def id_field_contains(fieldname: str, content: str) -> bool:
+
+    #fieldname = fieldname.split(";")[1]    
 
     if fieldname == "":
         return False

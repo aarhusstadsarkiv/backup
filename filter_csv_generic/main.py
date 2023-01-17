@@ -4,6 +4,14 @@ import csv
 import argparse
 from settings import FIELDS
 
+def get_version() -> str:
+    version = "Ukendt version"
+    with open(Path(__file__).absolute().parent.parent / "pyproject.toml") as i:
+        for line in i.readlines():
+            if line.startswith("version"):
+                version = line[line.index('"') + 1 : -2]
+    return version
+
 
 def main(args=None):
     # output: dict[str, dict[str, str]] = {}
@@ -29,14 +37,16 @@ def main(args=None):
     )
     parser.add_argument(
         "csv_path",
-        metavar="input_dir",
+        metavar="input_csv_file_path",
         type=str,
+        nargs='?',
         help="Path to the backup database csv file.",
     )
     parser.add_argument(
         "output_path",
         metavar="output_dir",
         type=str,
+        nargs='?',
         help="Path to the output/result directory for csv file(s).",
     )
     parser.add_argument(
@@ -46,10 +56,24 @@ def main(args=None):
         action="append",
         help=("Adds a filter to limit the results"),
     )
+    
+    def list_fields() -> None:
+        print("Printing fields...")
+        for key in FIELDS.keys():
+            print(key, FIELDS[key].keys())
+
+    
+    parser.add_argument("--version", action="version", version=get_version(), help="States the current version of this CLI.")
+    #parser.add_argument("--list", action="store_const", const=list_fields(), help="Lists all available fields to search and their type.")
+    parser.add_argument("--list", action="store_true")    
 
     args = parser.parse_args(args)
 
-    input_dir = Path(args.csv_path)
+    if args.list:
+        list_fields()
+        exit(0)
+
+    input_csv = Path(args.csv_path)
     output_dir = Path(args.output_path)
 
     print("Starting filtering process...")
@@ -60,7 +84,17 @@ def main(args=None):
     #     "C:\\Users\\az68636\\github\\filter-csv-generic\\tests\\test_data\\2022-11-29_oas_backup.csv"
     # )
 
-    csv_path = input_dir
+    csv_path = input_csv
+    #-----input validation-------------------------------------------------
+    if not csv_path.suffix == ".csv":
+        exit("input file is not a csv-file...")
+
+    if not csv_path.exists():        
+        exit("input csv-file does not exists...")
+
+    if not output_dir.exists():
+        exit("output directory does not exists. Please create one...")
+    #----------------------------------------------------------------------
 
     with open(csv_path, encoding="utf-8") as csvf:
         csvReader = csv.DictReader(csvf)
@@ -77,7 +111,7 @@ def main(args=None):
                 fieldname: str = args.filter[i][0]
                 operator_key = args.filter[i][1]
                 operator = FIELDS[fieldname][operator_key]
-                value = args.filter[i][2]
+                value: str = args.filter[i][2]                
 
                 if not _dict.get(fieldname):
                     op_results = False

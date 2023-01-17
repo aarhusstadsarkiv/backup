@@ -11,29 +11,35 @@ OPERATORS_ID_FIELD: dict = {
     "greaterThan": id_field_ops.greater_than,
     "lessThan": id_field_ops.less_than,
     "contains": id_field_ops.id_field_contains,
+    "regex": id_field_ops.regex
 }
 OPERATORS_ID_FIELD_LIST: dict = {
     "equalTo": id_field_list_ops.equal_to,
     "greaterThan": id_field_list_ops.greater_than,
     "lessThan": id_field_list_ops.less_than,
     "contains": id_field_list_ops.id_field_list_contains,
+    "regex": id_field_list_ops.regex
 }
 OPERATORS_DATE_FIELD: dict = {
     "equalTo": date_field_ops.equal_to,
     "greaterThan": date_field_ops.greater_than,
     "lessThan": date_field_ops.less_than,
+    "regex": date_field_ops.regex
 }
 OPERATORS_STRING_FIELD: dict = {
     "equalTo": string_ops.equal_to,
     "contains": string_ops.contains,
+    "regex": string_ops.regex
 }
 OPERATORS_DICT_FIELD: dict = {
     "hasKey": dict_field_ops.hasKey,
     "contains": dict_field_ops.contains,
+    "regex": dict_field_ops.regex
 }
 OPERATORS_STRING_FIELD_LIST: dict = {
     "contains": string_list_ops.contains,
     "equalTo": string_list_ops.equal_to,
+    "regex": string_list_ops.regex
 }
 
 FIELDS: dict = {

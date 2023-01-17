@@ -2,6 +2,27 @@ from filter_csv_generic import main
 
 
 # --------OPERATORS_ID_FIELD-------------------------------------------------------------------------
+def test_OPERATORS_ID_FIELD_regex(capfd):
+
+    csv_path = "./tests/test_data/testdata.csv"
+
+    test_path_output = "./tests/test_data/"
+
+    args = [
+        csv_path,
+        test_path_output,
+        "--filter",
+        "collection",
+        "regex",
+        "\(1700-1970\)",
+    ]
+
+    main.main(args)
+
+    out, err = capfd.readouterr()
+
+    assert out.__contains__("10") and err == ""
+
 
 
 def test_OPERATORS_ID_FIELD_contains(capfd):

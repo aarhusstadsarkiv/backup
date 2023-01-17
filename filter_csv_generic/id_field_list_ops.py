@@ -1,12 +1,28 @@
+import re
+
+
+def regex(fieldvalues: list, pattern: str) -> bool:
+    if not fieldvalues:
+        return False
+    
+    p = re.compile(pattern)
+
+    for x in fieldvalues:
+        if p.findall(x):
+            return True
+    
+    return False
+
+
 def id_field_list_contains(fieldvalues: list, content: str) -> bool:
 
-    if fieldvalues == []:
+    if not fieldvalues:
         return False
-    else:
-        for x in range(0, len(fieldvalues), 1):
-            if content in fieldvalues[x]:
-                return True
-        return False
+    
+    for x in fieldvalues:
+        if content in x:
+            return True
+    return False
 
 
 def equal_to(fieldvalues: list, content: str) -> bool:
