@@ -22,3 +22,6 @@ def contains(fieldname: list[str], content: str) -> bool:
 
 def equal_to(fieldname: list[str], content: str) -> bool:
     return content in fieldname  # exact equal to
+
+def not_equal_to(fieldname: list[str], content: str) -> bool:
+    return not content in fieldname

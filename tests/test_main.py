@@ -12,9 +12,9 @@ def test_OPERATORS_ID_FIELD_regex(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "collection",
+        "Samling",
         "regex",
-        "\(1700-1970\)",
+        "\\(1700-1970\\)",
     ]
 
     main.main(args)
@@ -35,7 +35,7 @@ def test_OPERATORS_ID_FIELD_contains(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "collection",
+        "Samling",
         "contains",
         "Sejrs Sedler",
     ]
@@ -57,7 +57,7 @@ def test_OPERATORS_ID_FIELD_notEqualTo(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "collection",
+        "Samling",
         "notEqualTo",
         "2",
     ]
@@ -79,7 +79,7 @@ def test_OPERATORS_ID_FIELD_equalTo(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "collection",
+        "Samling",
         "equalTo",
         "2",
     ]
@@ -100,7 +100,7 @@ def test_OPERATORS_ID_FIELD_LIST_equalTo(capfd):
 
     test_path_output = "./tests/test_data/"
 
-    args = [csv_path, test_path_output, "--filter", "curators", "equalTo", "3"]
+    args = [csv_path, test_path_output, "--filter", "Kurator", "equalTo", "3"]
 
     main.main(args)
 
@@ -119,11 +119,11 @@ def test_OPERATORS_ID_FIELD_LIST_contains_two_filters(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "curators",
+        "Kurator",
         "contains",
         "Test",
         "--filter",
-        "curators",
+        "Kurator",
         "equalTo",
         "1",
     ]
@@ -145,7 +145,7 @@ def test_OPERATORS_ID_FIELD_LIST_greaterThan(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "curators",
+        "Kurator",
         "greaterThan",
         "1",
     ]
@@ -167,7 +167,7 @@ def test_OPERATORS_ID_FIELD_LIST_lessThan(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "curators",
+        "Kurator",
         "lessThan",
         "2",
     ]
@@ -176,7 +176,7 @@ def test_OPERATORS_ID_FIELD_LIST_lessThan(capfd):
 
     out, err = capfd.readouterr()
 
-    assert out.__contains__("12") and err == ""
+    assert out.__contains__("13") and err == ""
 
 
 # --------OPERATORS_DATE_FIELD---------------------------------------------------------------------------
@@ -192,7 +192,7 @@ def test_OPERATORS_DATE_FIELD_equalTo(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "date_from",
+        "Startdato",
         "equalTo",
         "1877-04-17",
     ]
@@ -214,7 +214,7 @@ def test_OPERATORS_DATE_FIELD_greaterThan(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "date_from",
+        "Startdato",
         "greaterThan",
         "1877-04-17",
     ]
@@ -236,7 +236,7 @@ def test_OPERATORS_DATE_FIELD_lessThan(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "date_from",
+        "Startdato",
         "lessThan",
         "1877-04-17",
     ]
@@ -245,7 +245,7 @@ def test_OPERATORS_DATE_FIELD_lessThan(capfd):
 
     out, err = capfd.readouterr()
 
-    assert out.__contains__("1") and err == ""
+    assert out.__contains__("2") and err == ""
 
 
 # --------OPERATORS_STRING_FIELD--------------------------------------------------------------------------
@@ -261,7 +261,7 @@ def test_OPERATORS_STRING_FIELD_contains(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "desc_notes",
+        "Beskrivelsesnoter",
         "contains",
         "Tekstindholdet",
     ]
@@ -283,7 +283,7 @@ def test_OPERATORS_STRING_FIELD_equalTo(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "desc_notes",
+        "Beskrivelsesnoter",
         "equalTo",
         (
             "Tekstindholdet af dette kartotekskort er afskrevet af frivillige"
@@ -311,7 +311,7 @@ def test_OPERATORS_DICT_FIELD_contains(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "desc_data",
+        "Beskrivelsesdata",
         "contains",
         "Typer:Farve",
     ]
@@ -333,7 +333,7 @@ def test_OPERATORS_DICT_FIELD_hasKey(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "desc_data",
+        "Beskrivelsesdata",
         "hasKey",
         "Typer",
     ]
@@ -355,11 +355,11 @@ def test_OPERATORS_DICT_FIELD_contains_two_filters_w_datefield(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "desc_data",
+        "Beskrivelsesdata",
         "contains",
         "Typer:Farve",
         "--filter",
-        "date_from",
+        "Startdato",
         "lessThan",
         "2000",
     ]
@@ -384,7 +384,7 @@ def test_OPERATORS_STRING_FIELD_LIST_equalTo(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "barcode",
+        "Stregkode",
         "equalTo",
         "8025866751",
     ]
@@ -406,11 +406,11 @@ def test_OPERATORS_STRING_FIELD_LIST_contains_on_two_barcodes(capfd):
         csv_path,
         test_path_output,
         "--filter",
-        "barcode",
+        "Stregkode",
         "contains",
         "80258",
         "--filter",
-        "barcode",
+        "Stregkode",
         "contains",
         "11",
     ]

@@ -2,7 +2,8 @@ import json
 from pathlib import Path
 import csv
 import argparse
-from settings import FIELDS
+from settings import FIELDS, FIELDS_TRANSLATED
+
 
 def get_version() -> str:
     version = "Ukendt version"
@@ -19,19 +20,20 @@ def main(args=None):
 
     parser = argparse.ArgumentParser(
         description=(
-            "Filters the csv formatted backup database.\n"
-            "Apply any number of --filter: Allowed field searches are:\n"
-            "collection, curators, desc_notes, date_from, creators, reg_id \n"
-            "Allowed operators are: "
-            "equalTo, notEqualTo, greaterThan, lessThan, contains.\n\n"
+            "Filters the csv formatted backup database:\n"
+            "Apply any number of --filter \n"
+            "Use --list for allowed fields and operators. "
+            "\n\n"
             'ex.1 field is "id-field"\n'
-            "--filter collection equalTo 1\n\n"
+            '--filter Samling equalTo 1\n'
+            'or\n'
+            '--filter Samling contains Salling\n\n'
             "ex.2 if the field is a dictionary, and target search is in a key's value:\n"
-            '--filter admin_data contains "Bestillingsinformation:negativsamlingen 1970"\n\n'
+            '--filter "Administrative data" contains "Bestillingsinformation:negativsamlingen 1970"\n\n'
             "ex.3 if the field is a dictionary, and filter after target has a certain key:\n"
-            "--filter admin_data hasKey Bestillingsinformation\n\n"
+            '--filter "Administrative data" hasKey Bestillingsinformation\n\n'
             "ex.4 the field is a dictionary and the key is known and filter on the value:\n"
-            "--filter desc_data contains Typer:Farve"
+            '--filter "Beskrivelsesdata" contains Typer:Farve'
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -57,17 +59,18 @@ def main(args=None):
         help=("Adds a filter to limit the results"),
     )
     
-    def list_fields() -> None:
-        print("Printing fields...")
-        for key in FIELDS.keys():
-            print(key, FIELDS[key].keys())
-
+    parser.add_argument("--version", action="version", version=get_version(), help="States the current version of this CLI.")    
+    parser.add_argument("--list", action="store_true", help="Lists the allowed fields and their operators.")
     
-    parser.add_argument("--version", action="version", version=get_version(), help="States the current version of this CLI.")
-    #parser.add_argument("--list", action="store_const", const=list_fields(), help="Lists all available fields to search and their type.")
-    parser.add_argument("--list", action="store_true")    
+    parser.add_argument("--filename", type=str, nargs=1, action="append", help="specify the output filename(s).")
 
     args = parser.parse_args(args)
+
+    def list_fields() -> None:
+        print("Printing fields and operators...")
+        for key in FIELDS_TRANSLATED.keys():
+            print(key.ljust(25), end="")
+            print(", ".join(FIELDS[FIELDS_TRANSLATED[key]].keys()))
 
     if args.list:
         list_fields()
@@ -109,13 +112,19 @@ def main(args=None):
             for i in range(len(filters)):
 
                 fieldname: str = args.filter[i][0]
-                operator_key = args.filter[i][1]
-                operator = FIELDS[fieldname][operator_key]
-                value: str = args.filter[i][2]                
+                fieldname = FIELDS_TRANSLATED[fieldname]
 
-                if not _dict.get(fieldname):
+                operator_key: str = args.filter[i][1]                
+                value: str = args.filter[i][2]
+
+                if value.lower() == "null" and operator_key == "equalTo" and not _dict.get(fieldname):
+                    op_results = True
+                elif value.lower() == "null" and operator_key == "notEqualTo" and _dict.get(fieldname):
+                    op_results = True
+                elif not _dict.get(fieldname):
                     op_results = False
-                else:
+                else:                    
+                    operator = FIELDS[fieldname][operator_key]
                     op_results = operator(_dict[fieldname], value)
 
                 operators_results.append(op_results)
@@ -132,7 +141,15 @@ def main(args=None):
     for i in range(0, len(output), max_file_size):
 
         # output_path = "C:\\Users\\az68636\\github\\filter-csv-generic\\tests\\test_data\\"
-        csv_out_path = Path(output_dir, Path("filter_results_" + str(count) + ".csv"))
+
+        #output_dir
+
+        if args.filename:            
+            custom_filename: str = args.filename[0][0]
+            csv_out_path = Path(output_dir, Path(custom_filename + "_" + str(count) + ".csv"))
+        else:
+            csv_out_path = Path(output_dir, Path("filter_results_" + str(count) + ".csv"))            
+        
 
         with open(csv_out_path, "w", newline="") as f:
             write = csv.writer(f)
