@@ -63,6 +63,7 @@ def main(args=None):
     parser.add_argument("--list", action="store_true", help="Lists the allowed fields and their operators.")
     
     parser.add_argument("--filename", type=str, nargs=1, action="append", help="specify the output filename(s).")
+    parser.add_argument("--or_", action="store_true", help="the filters are or'ed together.")
 
     args = parser.parse_args(args)
 
@@ -82,10 +83,6 @@ def main(args=None):
     print("Starting filtering process...")
 
     filters: list[list[str]] = args.filter
-
-    # csv_path = Path(
-    #     "C:\\Users\\az68636\\github\\filter-csv-generic\\tests\\test_data\\2022-11-29_oas_backup.csv"
-    # )
 
     csv_path = input_csv
     #-----input validation-------------------------------------------------
@@ -109,7 +106,7 @@ def main(args=None):
 
             operators_results: list[bool] = []
 
-            for i in range(len(filters)):
+            for i in range(len(filters)):   #i is filter No.
 
                 fieldname: str = args.filter[i][0]
                 fieldname = FIELDS_TRANSLATED[fieldname]
@@ -129,7 +126,10 @@ def main(args=None):
 
                 operators_results.append(op_results)
 
-            total_op_result = all(operators_results)
+            if args.or_:
+                total_op_result = any(operators_results)
+            else:
+                total_op_result = all(operators_results)
 
             if not total_op_result:
                 continue  # if false
@@ -139,10 +139,6 @@ def main(args=None):
     max_file_size = 5000
     count = 0
     for i in range(0, len(output), max_file_size):
-
-        # output_path = "C:\\Users\\az68636\\github\\filter-csv-generic\\tests\\test_data\\"
-
-        #output_dir
 
         if args.filename:            
             custom_filename: str = args.filename[0][0]
@@ -154,7 +150,7 @@ def main(args=None):
         with open(csv_out_path, "w", newline="") as f:
             write = csv.writer(f)
             write.writerow(["id"])
-            write.writerows(output[i : i + max_file_size])
+            write.writerows(output[i : i + max_file_size])  #writes data in blobs of max_file_size
 
         count += 1
 

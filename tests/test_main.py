@@ -1,4 +1,32 @@
 from filter_csv_generic import main
+#---------OR-----------------------------------------------------------------------------------------
+
+def test_OPERATORS_DICT_FIELD_or(capfd):
+
+    csv_path = "./tests/test_data/testdata.csv"
+
+    test_path_output = "./tests/test_data/"
+
+    args = [
+        csv_path,
+        test_path_output,
+        "--filter",
+        "Beskrivelsesdata",
+        "regex",
+        "Aarhus Stiftstidende$", #8 results
+        "--filter",
+        "Skematype",
+        "contains",
+        "Analog",               #13 results
+        "--or_"                 #or
+
+    ]
+
+    main.main(args)
+
+    out, err = capfd.readouterr()
+
+    assert out.__contains__("13") and err == ""
 
 
 # --------OPERATORS_ID_FIELD-------------------------------------------------------------------------
@@ -92,6 +120,19 @@ def test_OPERATORS_ID_FIELD_equalTo(capfd):
 
 
 # --------OPERATORS_ID_FIELD_LIST--------------------------------------------------------------------------
+def test_OPERATORS_ID_FIELD_LIST_regex(capfd):
+
+    csv_path = "./tests/test_data/testdata.csv"
+
+    test_path_output = "./tests/test_data/"
+
+    args = [csv_path, test_path_output, "--filter", "Kurator", "regex", "1"]
+
+    main.main(args)
+
+    out, err = capfd.readouterr()
+
+    assert out.__contains__("13") and err == ""
 
 
 def test_OPERATORS_ID_FIELD_LIST_equalTo(capfd):
@@ -180,6 +221,26 @@ def test_OPERATORS_ID_FIELD_LIST_lessThan(capfd):
 
 
 # --------OPERATORS_DATE_FIELD---------------------------------------------------------------------------
+def test_OPERATORS_DATE_FIELD_regex(capfd):
+
+    csv_path = "./tests/test_data/testdata.csv"
+
+    test_path_output = "./tests/test_data/"
+
+    args = [
+        csv_path,
+        test_path_output,
+        "--filter",
+        "Startdato",
+        "regex",
+        "1877",
+    ]
+
+    main.main(args)
+
+    out, err = capfd.readouterr()
+
+    assert out.__contains__("1") and err == ""
 
 
 def test_OPERATORS_DATE_FIELD_equalTo(capfd):
@@ -249,6 +310,26 @@ def test_OPERATORS_DATE_FIELD_lessThan(capfd):
 
 
 # --------OPERATORS_STRING_FIELD--------------------------------------------------------------------------
+def test_OPERATORS_STRING_FIELD_regex(capfd):
+
+    csv_path = "./tests/test_data/testdata.csv"
+
+    test_path_output = "./tests/test_data/"
+
+    args = [
+        csv_path,
+        test_path_output,
+        "--filter",
+        "Beskrivelsesnoter",
+        "regex",
+        "frivillige",
+    ]
+
+    main.main(args)
+
+    out, err = capfd.readouterr()
+
+    assert out.__contains__("10") and err == ""
 
 
 def test_OPERATORS_STRING_FIELD_contains(capfd):
@@ -299,6 +380,26 @@ def test_OPERATORS_STRING_FIELD_equalTo(capfd):
 
 
 # --------OPERATORS_DICT_FIELD--------------------------------------------------------------------------
+def test_OPERATORS_DICT_FIELD_regex(capfd):
+
+    csv_path = "./tests/test_data/testdata.csv"
+
+    test_path_output = "./tests/test_data/"
+
+    args = [
+        csv_path,
+        test_path_output,
+        "--filter",
+        "Beskrivelsesdata",
+        "regex",
+        "Aarhus Stiftstidende$",
+    ]
+
+    main.main(args)
+
+    out, err = capfd.readouterr()
+
+    assert out.__contains__("8") and err == ""
 
 
 def test_OPERATORS_DICT_FIELD_contains(capfd):
@@ -372,6 +473,26 @@ def test_OPERATORS_DICT_FIELD_contains_two_filters_w_datefield(capfd):
 
 
 # --------OPERATORS_STRING_FIELD_LIST--------------------------------------------------------------------------
+def test_OPERATORS_STRING_FIELD_LIST_regex(capfd):
+
+    csv_path = "./tests/test_data/testdata.csv"
+
+    test_path_output = "./tests/test_data/"
+
+    args = [
+        csv_path,
+        test_path_output,
+        "--filter",
+        "Stregkode",
+        "regex",
+        "8025866751",
+    ]
+
+    main.main(args)
+
+    out, err = capfd.readouterr()
+
+    assert out.__contains__("2") and err == ""
 
 
 def test_OPERATORS_STRING_FIELD_LIST_equalTo(capfd):

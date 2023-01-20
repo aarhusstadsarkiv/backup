@@ -26,7 +26,8 @@ def id_field_list_contains(fieldvalues: list, value: str) -> bool:
 
 
 def equal_to(fieldvalues: list, value: str) -> bool:
-
+    """fieldvalues from the csv database in the form [""1;Aarhus Stadsarkiv""]"""
+    """value is user input"""
     if fieldvalues == []:
         return False
     else:
@@ -41,6 +42,7 @@ def equal_to(fieldvalues: list, value: str) -> bool:
         return False
 
 def not_equal_to(fieldvalues: list, value: str) -> bool:
+    """Same as above, but negative search"""
 
     if fieldvalues == []:
         return False

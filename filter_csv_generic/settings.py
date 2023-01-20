@@ -101,7 +101,7 @@ FIELDS: dict = {
     "objects": OPERATORS_STRING_FIELD_LIST
 
 }
-
+#translation between gui and backend fields:
 FIELDS_TRANSLATED: dict[str, str] = {
     "UnikID": "identifier",
     "RegistreringsID": "reg_id",
