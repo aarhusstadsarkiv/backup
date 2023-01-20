@@ -9,7 +9,7 @@ def regex(datefield: str, pattern: str) -> bool:
 
     if p.findall(datefield):
         return True
-    
+
     return False
 
 

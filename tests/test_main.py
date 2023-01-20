@@ -1,5 +1,7 @@
 from filter_csv_generic import main
-#---------OR-----------------------------------------------------------------------------------------
+
+# ---------OR-----------------------------------------------------------------------------------------
+
 
 def test_OPERATORS_DICT_FIELD_or(capfd):
 
@@ -13,13 +15,12 @@ def test_OPERATORS_DICT_FIELD_or(capfd):
         "--filter",
         "Beskrivelsesdata",
         "regex",
-        "Aarhus Stiftstidende$", #8 results
+        "Aarhus Stiftstidende$",  # 8 results
         "--filter",
         "Skematype",
         "contains",
-        "Analog",               #13 results
-        "--or_"                 #or
-
+        "Analog",  # 13 results
+        "--or_",  # or
     ]
 
     main.main(args)
@@ -50,7 +51,6 @@ def test_OPERATORS_ID_FIELD_regex(capfd):
     out, err = capfd.readouterr()
 
     assert out.__contains__("10") and err == ""
-
 
 
 def test_OPERATORS_ID_FIELD_contains(capfd):

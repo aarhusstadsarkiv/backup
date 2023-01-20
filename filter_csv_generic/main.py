@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import csv
 import argparse
-from settings import FIELDS, FIELDS_TRANSLATED
+from filter_csv_generic.settings import FIELDS, FIELDS_TRANSLATED
 
 
 def get_version() -> str:
@@ -15,7 +15,7 @@ def get_version() -> str:
 
 
 def main(args=None):
-    # output: dict[str, dict[str, str]] = {}
+
     output: list[tuple[int, int, int]] = []
 
     parser = argparse.ArgumentParser(
@@ -25,11 +25,12 @@ def main(args=None):
             "Use --list for allowed fields and operators. "
             "\n\n"
             'ex.1 field is "id-field"\n'
-            '--filter Samling equalTo 1\n'
-            'or\n'
-            '--filter Samling contains Salling\n\n'
+            "--filter Samling equalTo 1\n"
+            "or\n"
+            "--filter Samling contains Salling\n\n"
             "ex.2 if the field is a dictionary, and target search is in a key's value:\n"
-            '--filter "Administrative data" contains "Bestillingsinformation:negativsamlingen 1970"\n\n'
+            '--filter "Administrative data" contains '
+            '"Bestillingsinformation:negativsamlingen 1970"\n\n'
             "ex.3 if the field is a dictionary, and filter after target has a certain key:\n"
             '--filter "Administrative data" hasKey Bestillingsinformation\n\n'
             "ex.4 the field is a dictionary and the key is known and filter on the value:\n"
@@ -41,14 +42,14 @@ def main(args=None):
         "csv_path",
         metavar="input_csv_file_path",
         type=str,
-        nargs='?',
+        nargs="?",
         help="Path to the backup database csv file.",
     )
     parser.add_argument(
         "output_path",
         metavar="output_dir",
         type=str,
-        nargs='?',
+        nargs="?",
         help="Path to the output/result directory for csv file(s).",
     )
     parser.add_argument(
@@ -58,11 +59,20 @@ def main(args=None):
         action="append",
         help=("Adds a filter to limit the results"),
     )
-    
-    parser.add_argument("--version", action="version", version=get_version(), help="States the current version of this CLI.")    
-    parser.add_argument("--list", action="store_true", help="Lists the allowed fields and their operators.")
-    
-    parser.add_argument("--filename", type=str, nargs=1, action="append", help="specify the output filename(s).")
+
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=get_version(),
+        help="States the current version of this CLI.",
+    )
+    parser.add_argument(
+        "--list", action="store_true", help="Lists the allowed fields and their operators."
+    )
+
+    parser.add_argument(
+        "--filename", type=str, nargs=1, action="append", help="specify the output filename(s)."
+    )
     parser.add_argument("--or_", action="store_true", help="the filters are or'ed together.")
 
     args = parser.parse_args(args)
@@ -85,16 +95,16 @@ def main(args=None):
     filters: list[list[str]] = args.filter
 
     csv_path = input_csv
-    #-----input validation-------------------------------------------------
+    # -----input validation-------------------------------------------------
     if not csv_path.suffix == ".csv":
         exit("input file is not a csv-file...")
 
-    if not csv_path.exists():        
+    if not csv_path.exists():
         exit("input csv-file does not exists...")
 
     if not output_dir.exists():
         exit("output directory does not exists. Please create one...")
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
 
     with open(csv_path, encoding="utf-8") as csvf:
         csvReader = csv.DictReader(csvf)
@@ -106,21 +116,29 @@ def main(args=None):
 
             operators_results: list[bool] = []
 
-            for i in range(len(filters)):   #i is filter No.
+            for i in range(len(filters)):  # i is filter No.
 
                 fieldname: str = args.filter[i][0]
                 fieldname = FIELDS_TRANSLATED[fieldname]
 
-                operator_key: str = args.filter[i][1]                
+                operator_key: str = args.filter[i][1]
                 value: str = args.filter[i][2]
 
-                if value.lower() == "null" and operator_key == "equalTo" and not _dict.get(fieldname):
+                if (
+                    value.lower() == "null"
+                    and operator_key == "equalTo"
+                    and not _dict.get(fieldname)
+                ):
                     op_results = True
-                elif value.lower() == "null" and operator_key == "notEqualTo" and _dict.get(fieldname):
+                elif (
+                    value.lower() == "null"
+                    and operator_key == "notEqualTo"
+                    and _dict.get(fieldname)
+                ):
                     op_results = True
                 elif not _dict.get(fieldname):
                     op_results = False
-                else:                    
+                else:
                     operator = FIELDS[fieldname][operator_key]
                     op_results = operator(_dict[fieldname], value)
 
@@ -140,17 +158,16 @@ def main(args=None):
     count = 0
     for i in range(0, len(output), max_file_size):
 
-        if args.filename:            
+        if args.filename:
             custom_filename: str = args.filename[0][0]
             csv_out_path = Path(output_dir, Path(custom_filename + "_" + str(count) + ".csv"))
         else:
-            csv_out_path = Path(output_dir, Path("filter_results_" + str(count) + ".csv"))            
-        
+            csv_out_path = Path(output_dir, Path("filter_results_" + str(count) + ".csv"))
 
         with open(csv_out_path, "w", newline="") as f:
             write = csv.writer(f)
             write.writerow(["id"])
-            write.writerows(output[i : i + max_file_size])  #writes data in blobs of max_file_size
+            write.writerows(output[i : i + max_file_size])  # writes data in blobs of max_file_size
 
         count += 1
 

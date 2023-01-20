@@ -12,7 +12,7 @@ def regex(_dict: dict[str, str], pattern: str) -> bool:
     for key in _dict.keys():
         if p.findall(_dict[key]):
             return True
-    
+
     return False
 
 

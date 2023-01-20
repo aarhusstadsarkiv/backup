@@ -4,13 +4,13 @@ import re
 def regex(fieldvalues: list, pattern: str) -> bool:
     if not fieldvalues:
         return False
-    
+
     p = re.compile(pattern)
 
     for x in fieldvalues:
         if p.findall(x):
             return True
-    
+
     return False
 
 
@@ -18,7 +18,7 @@ def id_field_list_contains(fieldvalues: list, value: str) -> bool:
 
     if not fieldvalues:
         return False
-    
+
     for x in fieldvalues:
         if value in x:
             return True
@@ -41,6 +41,7 @@ def equal_to(fieldvalues: list, value: str) -> bool:
 
         return False
 
+
 def not_equal_to(fieldvalues: list, value: str) -> bool:
     """Same as above, but negative search"""
 
@@ -56,6 +57,7 @@ def not_equal_to(fieldvalues: list, value: str) -> bool:
                 return True
 
         return False
+
 
 def greater_than(fieldvalues: list, value: str) -> bool:
 

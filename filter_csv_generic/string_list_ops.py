@@ -10,10 +10,8 @@ def regex(fieldname: list[str], pattern: str) -> bool:
     for x in fieldname:
         if p.findall(x):
             return True
-    
+
     return False
-
-
 
 
 def contains(fieldname: list[str], content: str) -> bool:
@@ -23,5 +21,6 @@ def contains(fieldname: list[str], content: str) -> bool:
 def equal_to(fieldname: list[str], content: str) -> bool:
     return content in fieldname  # exact equal to
 
+
 def not_equal_to(fieldname: list[str], content: str) -> bool:
-    return not content in fieldname
+    return content not in fieldname

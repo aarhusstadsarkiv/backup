@@ -12,13 +12,13 @@ def regex(fieldname: str, pattern: str) -> bool:
 
     if p.findall(fieldname):
         return True
-    
+
     return False
 
 
 def id_field_contains(fieldname: str, content: str) -> bool:
 
-    #fieldname = fieldname.split(";")[1]    
+    # fieldname = fieldname.split(";")[1]
 
     if fieldname == "":
         return False

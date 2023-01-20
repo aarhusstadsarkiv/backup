@@ -1,9 +1,9 @@
-import id_field_ops
-import id_field_list_ops
-import date_field_ops
-import string_ops
-import dict_field_ops
-import string_list_ops
+import filter_csv_generic.id_field_ops as id_field_ops
+import filter_csv_generic.id_field_list_ops as id_field_list_ops
+import filter_csv_generic.date_field_ops as date_field_ops
+import filter_csv_generic.string_ops as string_ops
+import filter_csv_generic.dict_field_ops as dict_field_ops
+import filter_csv_generic.string_list_ops as string_list_ops
 
 OPERATORS_ID_FIELD: dict = {
     "equalTo": id_field_ops.equal_to,
@@ -11,7 +11,7 @@ OPERATORS_ID_FIELD: dict = {
     "greaterThan": id_field_ops.greater_than,
     "lessThan": id_field_ops.less_than,
     "contains": id_field_ops.id_field_contains,
-    "regex": id_field_ops.regex
+    "regex": id_field_ops.regex,
 }
 OPERATORS_ID_FIELD_LIST: dict = {
     "equalTo": id_field_list_ops.equal_to,
@@ -19,31 +19,31 @@ OPERATORS_ID_FIELD_LIST: dict = {
     "greaterThan": id_field_list_ops.greater_than,
     "lessThan": id_field_list_ops.less_than,
     "contains": id_field_list_ops.id_field_list_contains,
-    "regex": id_field_list_ops.regex
+    "regex": id_field_list_ops.regex,
 }
 OPERATORS_DATE_FIELD: dict = {
     "equalTo": date_field_ops.equal_to,
     "notEqualTo": date_field_ops.not_equal_to,
     "greaterThan": date_field_ops.greater_than,
     "lessThan": date_field_ops.less_than,
-    "regex": date_field_ops.regex
+    "regex": date_field_ops.regex,
 }
 OPERATORS_STRING_FIELD: dict = {
     "equalTo": string_ops.equal_to,
     "notEqualTo": string_ops.not_equal_to,
     "contains": string_ops.contains,
-    "regex": string_ops.regex
+    "regex": string_ops.regex,
 }
 OPERATORS_DICT_FIELD: dict = {
     "hasKey": dict_field_ops.hasKey,
     "contains": dict_field_ops.contains,
-    "regex": dict_field_ops.regex
+    "regex": dict_field_ops.regex,
 }
 OPERATORS_STRING_FIELD_LIST: dict = {
     "contains": string_list_ops.contains,
     "equalTo": string_list_ops.equal_to,
     "notEqualTo": string_list_ops.not_equal_to,
-    "regex": string_list_ops.regex
+    "regex": string_list_ops.regex,
 }
 
 FIELDS: dict = {
@@ -98,15 +98,14 @@ FIELDS: dict = {
     "title": OPERATORS_STRING_FIELD,
     "format_type": OPERATORS_ID_FIELD,
     "digital_format": OPERATORS_DICT_FIELD,
-    "objects": OPERATORS_STRING_FIELD_LIST
-
+    "objects": OPERATORS_STRING_FIELD_LIST,
 }
-#translation between gui and backend fields:
+# translation between gui and backend fields:
 FIELDS_TRANSLATED: dict[str, str] = {
     "UnikID": "identifier",
     "RegistreringsID": "reg_id",
     "Skemaversion": "schema",
-    "Skematype": "related_content",    
+    "Skematype": "related_content",
     "Samling": "collection",
     "Serie": "series",
     "Samlingstag": "collection_tags",
@@ -154,5 +153,5 @@ FIELDS_TRANSLATED: dict[str, str] = {
     "Frimærkebillede": "thumbnail",
     "Repræsentationselementer": "representation_elements",
     "Persondata": "private_data",
-    #"Raw Storage": "raw_storage_field",     #ikke implementeret, ukendt type S?
+    # "Raw Storage": "raw_storage_field",     #ikke implementeret, ukendt type S?
 }
