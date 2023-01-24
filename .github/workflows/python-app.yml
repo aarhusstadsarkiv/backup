@@ -13,8 +13,8 @@ permissions:
   contents: read
 
 jobs:
-  call-linting-from-utils:
-    uses: aarhusstadsarkiv/acautils/.github/workflows/linting.yml@main
+#  call-linting-from-utils:
+#    uses: aarhusstadsarkiv/acautils/.github/workflows/linting.yml@main
 
   build:
 
