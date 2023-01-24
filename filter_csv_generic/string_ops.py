@@ -15,13 +15,13 @@ def regex(fieldname: str, pattern: str) -> bool:
 
 def equal_to(fieldname: str, content: str) -> bool:
 
-    return fieldname == content
+    return fieldname.lower() == content
 
 
 def not_equal_to(fieldname: str, content: str) -> bool:
 
-    return fieldname != content
+    return fieldname.lower() != content
 
 
 def contains(fieldname: str, content: str) -> bool:
-    return content in fieldname
+    return content in fieldname.lower()

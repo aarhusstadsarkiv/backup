@@ -15,12 +15,12 @@ def regex(fieldname: list[str], pattern: str) -> bool:
 
 
 def contains(fieldname: list[str], content: str) -> bool:
-    return any(content in string for string in fieldname)
+    return any(content in string.lower() for string in fieldname)
 
 
 def equal_to(fieldname: list[str], content: str) -> bool:
-    return content in fieldname  # exact equal to
+    return content in [item.lower() for item in fieldname]  # exact equal to
 
 
 def not_equal_to(fieldname: list[str], content: str) -> bool:
-    return content not in fieldname
+    return content not in [item.lower() for item in fieldname]

@@ -17,7 +17,7 @@ def regex(_dict: dict[str, str], pattern: str) -> bool:
 
 
 def hasKey(_dict: dict, content: str) -> bool:
-    return content in _dict
+    return content in [k.lower() for k in _dict.keys()]
 
 
 def contains(_dict: dict[str, str], content: str) -> bool:
@@ -26,6 +26,6 @@ def contains(_dict: dict[str, str], content: str) -> bool:
     key_value_pair = content.split(":")
     if len(key_value_pair) == 2 and _dict.get(key_value_pair[0]):
         value: str = key_value_pair[1]
-        return value in _dict.get(key_value_pair[0], [])
+        return value in _dict.get(key_value_pair[0], []).lower()
     else:
         return False

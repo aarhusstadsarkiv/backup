@@ -23,7 +23,7 @@ def id_field_contains(fieldname: str, content: str) -> bool:
     if fieldname == "":
         return False
     else:
-        return content in fieldname
+        return content in fieldname.lower()
 
 
 def equal_to(fieldname: str, content: str) -> bool:

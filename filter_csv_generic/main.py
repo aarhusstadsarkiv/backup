@@ -123,6 +123,7 @@ def main(args=None):
 
                 operator_key: str = args.filter[i][1]
                 value: str = args.filter[i][2]
+                value = value.lower()
 
                 if (
                     value.lower() == "null"
