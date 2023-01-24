@@ -1,12 +1,13 @@
 # Filters the backup database
-This .
-## --filter [field] [operator] [value] argument:
+This filters the csv formatted backup database:
+Apply any number of --filter.
+## --filter [field] [operator] [value]:
 ex. --filter Samling contains Salling. Value is the variable user input.
 
 ## --list:
 Lists the available fields and their operators.
 
-## --filename
+## --filename [filename]
 Specify the custom filename for the output file(s).
 
 ## --or_
