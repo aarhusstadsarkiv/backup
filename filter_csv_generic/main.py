@@ -110,6 +110,13 @@ def main(args=None):
     filters: list[list[str]] = args.filter
     extra_fields: list[list[str]] = args.field
 
+    if args.field:
+        header_print: list[str] = []
+        header_print.append("id")
+        for field in args.field:
+            
+            header_print.append(field[0])            
+
     csv_path = input_csv
     # -----input validation-------------------------------------------------
     if not csv_path.suffix == ".csv":
@@ -118,8 +125,8 @@ def main(args=None):
     if not csv_path.exists():
         exit("input csv-file does not exists...")
 
-    # if not output_dir.exists():
-    #     exit("output directory does not exists. Please create one...")
+    if args.output_path and not output_dir.exists():
+        exit("output directory does not exists. Please create one...")
     # ----------------------------------------------------------------------
 
     with open(csv_path, encoding="utf-8") as csvf:
@@ -203,10 +210,9 @@ def main(args=None):
 
             count += 1
     else:
-        for line in output:
-            print(line)
-
-    
+        print(header_print)
+        for row in output:
+            print(", ".join(row))
 
 
 if __name__ == "__main__":
