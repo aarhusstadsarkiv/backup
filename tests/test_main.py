@@ -1,5 +1,10 @@
-from filter_csv_generic import main
+import sys
+import os
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+
+from filter_csv_generic.main import main
 # ---------OR-----------------------------------------------------------------------------------------
 
 
@@ -23,7 +28,7 @@ def test_OPERATORS_DICT_FIELD_or(capfd):
         "--or_",  # or
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -46,7 +51,7 @@ def test_OPERATORS_ID_FIELD_regex(capfd):
         "\\(1700-1970\\)",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -68,7 +73,7 @@ def test_OPERATORS_ID_FIELD_contains(capfd):
         "Sejrs Sedler",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -90,7 +95,7 @@ def test_OPERATORS_ID_FIELD_notEqualTo(capfd):
         "2",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -112,7 +117,7 @@ def test_OPERATORS_ID_FIELD_equalTo(capfd):
         "2",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -128,7 +133,7 @@ def test_OPERATORS_ID_FIELD_LIST_regex(capfd):
 
     args = [csv_path, test_path_output, "--filter", "Kurator", "regex", "1"]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -143,7 +148,7 @@ def test_OPERATORS_ID_FIELD_LIST_equalTo(capfd):
 
     args = [csv_path, test_path_output, "--filter", "Kurator", "equalTo", "3"]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -169,7 +174,7 @@ def test_OPERATORS_ID_FIELD_LIST_contains_two_filters(capfd):
         "1",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -191,7 +196,7 @@ def test_OPERATORS_ID_FIELD_LIST_greaterThan(capfd):
         "1",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -213,7 +218,7 @@ def test_OPERATORS_ID_FIELD_LIST_lessThan(capfd):
         "2",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -236,7 +241,7 @@ def test_OPERATORS_DATE_FIELD_regex(capfd):
         "1877",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -258,7 +263,7 @@ def test_OPERATORS_DATE_FIELD_equalTo(capfd):
         "1877-04-17",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -280,7 +285,7 @@ def test_OPERATORS_DATE_FIELD_greaterThan(capfd):
         "1877-04-17",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -302,7 +307,7 @@ def test_OPERATORS_DATE_FIELD_lessThan(capfd):
         "1877-04-17",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -325,7 +330,7 @@ def test_OPERATORS_STRING_FIELD_regex(capfd):
         "frivillige",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -347,7 +352,7 @@ def test_OPERATORS_STRING_FIELD_contains(capfd):
         "Tekstindholdet",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -372,7 +377,7 @@ def test_OPERATORS_STRING_FIELD_equalTo(capfd):
         ),
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -395,7 +400,7 @@ def test_OPERATORS_DICT_FIELD_regex(capfd):
         "Aarhus Stiftstidende$",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -417,7 +422,7 @@ def test_OPERATORS_DICT_FIELD_contains(capfd):
         "Typer:Farve",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -439,7 +444,7 @@ def test_OPERATORS_DICT_FIELD_hasKey(capfd):
         "Typer",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -465,7 +470,7 @@ def test_OPERATORS_DICT_FIELD_contains_two_filters_w_datefield(capfd):
         "2000",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -488,7 +493,7 @@ def test_OPERATORS_STRING_FIELD_LIST_regex(capfd):
         "8025866751",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -510,7 +515,7 @@ def test_OPERATORS_STRING_FIELD_LIST_equalTo(capfd):
         "8025866751",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 
@@ -536,7 +541,7 @@ def test_OPERATORS_STRING_FIELD_LIST_contains_on_two_barcodes(capfd):
         "11",
     ]
 
-    main.main(args)
+    main(args)
 
     out, err = capfd.readouterr()
 

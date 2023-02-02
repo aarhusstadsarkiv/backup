@@ -10,7 +10,7 @@ def regex(_dict: dict[str, str], pattern: str) -> bool:
     p = re.compile(pattern)
 
     for key in _dict.keys():
-        if p.findall(_dict[key]):
+        if p.findall(_dict[key].lower()):
             return True
 
     return False
@@ -24,8 +24,11 @@ def contains(_dict: dict[str, str], content: str) -> bool:
     """_dict is the dictionary from the backup database csv."""
     """Content is the key-value pair from the user."""
     key_value_pair = content.split(":")
+
+    _dict = dict((k.lower(), v.lower()) for k,v in _dict.items())
+
     if len(key_value_pair) == 2 and _dict.get(key_value_pair[0]):
         value: str = key_value_pair[1]
-        return value in _dict.get(key_value_pair[0], []).lower()
+        return value in _dict.get(key_value_pair[0], [])
     else:
         return False
