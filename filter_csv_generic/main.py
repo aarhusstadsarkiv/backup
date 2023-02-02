@@ -58,6 +58,9 @@ def main(args=None):
         help="Path to the output/result directory for csv file(s).",
     )
     parser.add_argument(
+        "--print", action="store_true", help="If the results are few, prints the results instead of generating csv file(s)."
+    )
+    parser.add_argument(
         "--filter",
         type=str,
         nargs=3,
@@ -97,8 +100,10 @@ def main(args=None):
         list_fields()
         exit(0)
 
-    input_csv = Path(args.csv_path)
-    output_dir = Path(args.output_path)
+    if args.csv_path:
+        input_csv = Path(args.csv_path)
+    if args.output_path:
+        output_dir = Path(args.output_path)
 
     print("Starting filtering process...")
 
@@ -113,17 +118,15 @@ def main(args=None):
     if not csv_path.exists():
         exit("input csv-file does not exists...")
 
-    if not output_dir.exists():
-        exit("output directory does not exists. Please create one...")
+    # if not output_dir.exists():
+    #     exit("output directory does not exists. Please create one...")
     # ----------------------------------------------------------------------
 
     with open(csv_path, encoding="utf-8") as csvf:
         csvReader = csv.DictReader(csvf)
 
         for row in csvReader:
-            _dict: dict = json.loads(row["oasDictText"])
-
-            
+            _dict: dict = json.loads(row["oasDictText"])            
 
             operators_results: list[bool] = []
 
@@ -180,24 +183,30 @@ def main(args=None):
 
             output.append(to_add)   # if true            
 
-    max_file_size = 5000
-    count = 0
-    for i in range(0, len(output), max_file_size):
-
-        if args.filename:
-            custom_filename: str = args.filename[0][0]
-            csv_out_path = Path(output_dir, Path(custom_filename + "_" + str(count) + ".csv"))
-        else:
-            csv_out_path = Path(output_dir, Path("filter_results_" + str(count) + ".csv"))
-
-        with open(csv_out_path, "w", newline="", encoding='utf-8') as f:
-            write = csv.writer(f)            
-            write.writerow(header)
-            write.writerows(output[i : i + max_file_size])  # writes data in blobs of max_file_size
-
-        count += 1
-
     print("Done: Found " + str(len(output)) + " results matching the applied filter(s)")
+
+    if not args.print:
+        max_file_size = 5000
+        count = 0
+        for i in range(0, len(output), max_file_size):
+
+            if args.filename:
+                custom_filename: str = args.filename[0][0]
+                csv_out_path = Path(output_dir, Path(custom_filename + "_" + str(count) + ".csv"))
+            else:
+                csv_out_path = Path(output_dir, Path("filter_results_" + str(count) + ".csv"))
+
+            with open(csv_out_path, "w", newline="", encoding='utf-8') as f:
+                write = csv.writer(f)            
+                write.writerow(header)
+                write.writerows(output[i : i + max_file_size])  # writes data in blobs of max_file_size
+
+            count += 1
+    else:
+        for line in output:
+            print(line)
+
+    
 
 
 if __name__ == "__main__":

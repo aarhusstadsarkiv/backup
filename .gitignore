@@ -4,3 +4,4 @@ __pycache__/
 tests/test_data/2022-11-29_oas_backup.csv
 tests/test_data/filter_results_0.csv
 filter_csv_generic/printKeys.py
+tests/test_data/results/
