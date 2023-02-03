@@ -39,7 +39,7 @@ def main(args=None):
             '--filter "Beskrivelsesdata" contains Typer:Farve\n\n'
             'ex.5 use the "null" keyword to filter for any entry has a certain field:\n'
             '--filter Samling equalTo null or --filter Samling notEqualTo null\n\n'
-            'All user inputs are case-insensitive.'
+            'All user inputs are case-insensitive. Field names are case-sensitive.'
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )

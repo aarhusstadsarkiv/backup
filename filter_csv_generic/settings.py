@@ -103,6 +103,20 @@ FIELDS: dict = {
 }
 # translation between gui and backend fields:
 FIELDS_TRANSLATED: dict[str, str] = {
+    "Seneste dato": "date_to",
+    "Tidligste dato": "date_from",
+    "BEGIVENHEDER": "events",
+    "LOVGIVNING": "other_restrictions",
+    "AFTALEFORHOLD": "contractual_status",
+    "ORGANISATIONER": "organisations",
+    "PERSONER": "people",
+    "STEDER": "locations",
+    "OPHAVSRET": "copyright_status",
+    "EMNER": "subjects",
+    "DESKRIPTIV NOTE": "desc_notes",
+    "KREATIVT OPHAV": "creative_creators",
+    "MATERIALETYPE": "content_type",
+    "ARKIV ID": "identifier",
     "UnikID": "identifier",
     "RegistreringsID": "reg_id",
     "Skemaversion": "schema",
