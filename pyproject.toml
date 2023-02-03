@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "filter_csv_generic"
-version = "0.1.8"
+version = "0.1.9"
 description = ""
 authors = ["Thomas <oeth@aarhus.dk>"]
 readme = "README.md"

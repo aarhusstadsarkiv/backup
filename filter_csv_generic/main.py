@@ -105,7 +105,7 @@ def main(args=None):
     if args.output_path:
         output_dir = Path(args.output_path)
 
-    print("Starting filtering process...")
+    
 
     filters: list[list[str]] = args.filter
     extra_fields: list[list[str]] = args.field
@@ -117,8 +117,14 @@ def main(args=None):
             
             header_print.append(field[0])            
 
-    csv_path = input_csv
     # -----input validation-------------------------------------------------
+    if not args.csv_path:
+        exit("No input csv database backup given...")
+
+    if not args.filter:
+        exit("No filters were given...")    
+
+    csv_path = input_csv
     if not csv_path.suffix == ".csv":
         exit("input file is not a csv-file...")
 
@@ -132,6 +138,7 @@ def main(args=None):
         exit("output directory does not exists. Please create one...")
     # ----------------------------------------------------------------------
 
+    print("Starting filtering process...")
     with open(csv_path, encoding="utf-8") as csvf:
         csvReader = csv.DictReader(csvf)
 
