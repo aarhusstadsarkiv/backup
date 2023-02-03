@@ -196,7 +196,7 @@ def main(args=None):
                     fieldname = FIELDS_TRANSLATED[field[0]]
                     fieldvalue_ = _dict.get(fieldname, "")
                     
-                    to_add.append(json.dumps(fieldvalue_))
+                    to_add.append(json.dumps(fieldvalue_, ensure_ascii=False))
 
             output.append(to_add)   # if true            
 
