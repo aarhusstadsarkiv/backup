@@ -125,6 +125,9 @@ def main(args=None):
     if not csv_path.exists():
         exit("input csv-file does not exists...")
 
+    if not args.output_path and not args.print:
+        exit("No output path or --print...")
+
     if args.output_path and not output_dir.exists():
         exit("output directory does not exists. Please create one...")
     # ----------------------------------------------------------------------
