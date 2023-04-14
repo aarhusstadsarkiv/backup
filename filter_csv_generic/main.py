@@ -1,23 +1,25 @@
 import json
+import sys
 from pathlib import Path
 import csv
 import argparse
-from settings import FIELDS, FIELDS_TRANSLATED
-
+from typing import List, Tuple, Optional, Sequence
+# from importlib import metadata
+from filter_csv_generic.settings import FIELDS, FIELDS_TRANSLATED
 
 
 def get_version() -> str:
     version = "Ukendt version"
-    with open(Path(__file__).absolute().parent.parent / "pyproject.toml") as i:
-        for line in i.readlines():
-            if line.startswith("version"):
-                version = line[line.index('"') + 1 : -2]
-    return version
+    # with open(Path(__file__).absolute().parent.parent / "pyproject.toml") as i:
+    #     for line in i.readlines():
+    #         if line.startswith("version"):
+    #             version = line[line.index('"') + 1 : -2]
+    return version  # metadata.version("filter_csv_generic")
 
 
-def main(args=None):
+def main(argv: Optional[Sequence[str]] = None) -> int:
 
-    output: list[tuple[int, int, int]] = []
+    output: List[Tuple[int, int, int]] = []
 
     parser = argparse.ArgumentParser(
         description=(
@@ -87,8 +89,7 @@ def main(args=None):
         "--field", type=str, nargs=1, action="append", help="if specified, adds extra data field in results file(s)."
     )
 
-
-    args = parser.parse_args(args)
+    args = parser.parse_args(argv)
 
     def list_fields() -> None:
         print("Printing fields and operators...")
@@ -98,7 +99,7 @@ def main(args=None):
 
     if args.list:
         list_fields()
-        exit(0)
+        sys.exit(0)
 
     if args.csv_path:
         input_csv = Path(args.csv_path)
@@ -107,11 +108,11 @@ def main(args=None):
 
     
 
-    filters: list[list[str]] = args.filter
-    extra_fields: list[list[str]] = args.field
+    filters: List[List[str]] = args.filter
+    extra_fields: List[List[str]] = args.field
 
     if args.field:
-        header_print: list[str] = []
+        header_print: List[str] = []
         header_print.append("id")
         for field in args.field:
             
@@ -119,23 +120,23 @@ def main(args=None):
 
     # -----input validation-------------------------------------------------
     if not args.csv_path:
-        exit("No input csv database backup given...")
+        sys.exit("No input csv database backup given...")
 
     if not args.filter:
-        exit("No filters were given...")    
+        sys.exit("No filters were given...")    
 
     csv_path = input_csv
     if not csv_path.suffix == ".csv":
-        exit("input file is not a csv-file...")
+        sys.exit("input file is not a csv-file...")
 
     if not csv_path.exists():
-        exit("input csv-file does not exists...")
+        sys.exit("input csv-file does not exists...")
 
     if not args.output_path and not args.print:
-        exit("No output path or --print...")
+        sys.exit("No output path or --print...")
 
     if args.output_path and not output_dir.exists():
-        exit("output directory does not exists. Please create one...")
+        sys.exit("output directory does not exists. Please create one...")
     # ----------------------------------------------------------------------
 
     print("Starting filtering process...")
@@ -145,7 +146,7 @@ def main(args=None):
         for row in csvReader:
             _dict: dict = json.loads(row["oasDictText"])            
 
-            operators_results: list[bool] = []
+            operators_results: List[bool] = []
 
             for i in range(len(filters)):  # i is filter No.
 
@@ -185,8 +186,8 @@ def main(args=None):
                 continue  # if false
             
             id = row["id"]
-            header: list[str] = ["id"]
-            to_add: list[str] = [id]
+            header: List[str] = ["id"]
+            to_add: List[str] = [id]
 
             if extra_fields:
                 for field in extra_fields:
@@ -226,4 +227,4 @@ def main(args=None):
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

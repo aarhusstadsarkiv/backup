@@ -1,7 +1,7 @@
 import re
+from typing import List
 
-
-def regex(fieldname: list[str], pattern: str) -> bool:
+def regex(fieldname: List[str], pattern: str) -> bool:
     if not fieldname:
         return False
 
@@ -14,13 +14,13 @@ def regex(fieldname: list[str], pattern: str) -> bool:
     return False
 
 
-def contains(fieldname: list[str], content: str) -> bool:
+def contains(fieldname: List[str], content: str) -> bool:
     return any(content in string.lower() for string in fieldname)
 
 
-def equal_to(fieldname: list[str], content: str) -> bool:
+def equal_to(fieldname: List[str], content: str) -> bool:
     return content in [item.lower() for item in fieldname]  # exact equal to
 
 
-def not_equal_to(fieldname: list[str], content: str) -> bool:
+def not_equal_to(fieldname: List[str], content: str) -> bool:
     return content not in [item.lower() for item in fieldname]
