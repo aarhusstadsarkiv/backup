@@ -1,15 +1,13 @@
 import sys
 import os
 
+from backupsearch.main import main
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-from filter_csv_generic.main import main
-# ---------OR-----------------------------------------------------------------------------------------
-
 
 def test_OPERATORS_DICT_FIELD_or(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -37,7 +35,6 @@ def test_OPERATORS_DICT_FIELD_or(capfd):
 
 # --------OPERATORS_ID_FIELD-------------------------------------------------------------------------
 def test_OPERATORS_ID_FIELD_regex(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -59,7 +56,6 @@ def test_OPERATORS_ID_FIELD_regex(capfd):
 
 
 def test_OPERATORS_ID_FIELD_contains(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -81,7 +77,6 @@ def test_OPERATORS_ID_FIELD_contains(capfd):
 
 
 def test_OPERATORS_ID_FIELD_notEqualTo(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -103,7 +98,6 @@ def test_OPERATORS_ID_FIELD_notEqualTo(capfd):
 
 
 def test_OPERATORS_ID_FIELD_equalTo(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -126,7 +120,6 @@ def test_OPERATORS_ID_FIELD_equalTo(capfd):
 
 # --------OPERATORS_ID_FIELD_LIST--------------------------------------------------------------------------
 def test_OPERATORS_ID_FIELD_LIST_regex(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -141,7 +134,6 @@ def test_OPERATORS_ID_FIELD_LIST_regex(capfd):
 
 
 def test_OPERATORS_ID_FIELD_LIST_equalTo(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -156,7 +148,6 @@ def test_OPERATORS_ID_FIELD_LIST_equalTo(capfd):
 
 
 def test_OPERATORS_ID_FIELD_LIST_contains_two_filters(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -182,7 +173,6 @@ def test_OPERATORS_ID_FIELD_LIST_contains_two_filters(capfd):
 
 
 def test_OPERATORS_ID_FIELD_LIST_greaterThan(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -204,7 +194,6 @@ def test_OPERATORS_ID_FIELD_LIST_greaterThan(capfd):
 
 
 def test_OPERATORS_ID_FIELD_LIST_lessThan(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -227,7 +216,6 @@ def test_OPERATORS_ID_FIELD_LIST_lessThan(capfd):
 
 # --------OPERATORS_DATE_FIELD---------------------------------------------------------------------------
 def test_OPERATORS_DATE_FIELD_regex(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -249,7 +237,6 @@ def test_OPERATORS_DATE_FIELD_regex(capfd):
 
 
 def test_OPERATORS_DATE_FIELD_equalTo(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -271,7 +258,6 @@ def test_OPERATORS_DATE_FIELD_equalTo(capfd):
 
 
 def test_OPERATORS_DATE_FIELD_greaterThan(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -293,7 +279,6 @@ def test_OPERATORS_DATE_FIELD_greaterThan(capfd):
 
 
 def test_OPERATORS_DATE_FIELD_lessThan(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -316,7 +301,6 @@ def test_OPERATORS_DATE_FIELD_lessThan(capfd):
 
 # --------OPERATORS_STRING_FIELD--------------------------------------------------------------------------
 def test_OPERATORS_STRING_FIELD_regex(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -338,7 +322,6 @@ def test_OPERATORS_STRING_FIELD_regex(capfd):
 
 
 def test_OPERATORS_STRING_FIELD_contains(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -360,7 +343,6 @@ def test_OPERATORS_STRING_FIELD_contains(capfd):
 
 
 def test_OPERATORS_STRING_FIELD_equalTo(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -386,7 +368,6 @@ def test_OPERATORS_STRING_FIELD_equalTo(capfd):
 
 # --------OPERATORS_DICT_FIELD--------------------------------------------------------------------------
 def test_OPERATORS_DICT_FIELD_regex(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -408,7 +389,6 @@ def test_OPERATORS_DICT_FIELD_regex(capfd):
 
 
 def test_OPERATORS_DICT_FIELD_contains(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -430,7 +410,6 @@ def test_OPERATORS_DICT_FIELD_contains(capfd):
 
 
 def test_OPERATORS_DICT_FIELD_hasKey(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -452,7 +431,6 @@ def test_OPERATORS_DICT_FIELD_hasKey(capfd):
 
 
 def test_OPERATORS_DICT_FIELD_contains_two_filters_w_datefield(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -479,7 +457,6 @@ def test_OPERATORS_DICT_FIELD_contains_two_filters_w_datefield(capfd):
 
 # --------OPERATORS_STRING_FIELD_LIST--------------------------------------------------------------------------
 def test_OPERATORS_STRING_FIELD_LIST_regex(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -501,7 +478,6 @@ def test_OPERATORS_STRING_FIELD_LIST_regex(capfd):
 
 
 def test_OPERATORS_STRING_FIELD_LIST_equalTo(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"
@@ -523,7 +499,6 @@ def test_OPERATORS_STRING_FIELD_LIST_equalTo(capfd):
 
 
 def test_OPERATORS_STRING_FIELD_LIST_contains_on_two_barcodes(capfd):
-
     csv_path = "./tests/test_data/testdata.csv"
 
     test_path_output = "./tests/test_data/"

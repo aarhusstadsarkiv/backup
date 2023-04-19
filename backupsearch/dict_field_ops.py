@@ -1,6 +1,7 @@
 import re
 from typing import Dict
 
+
 def regex(_dict: Dict[str, str], pattern: str) -> bool:
     """_dict is the dictionary from the backup database csv."""
     """pattern is the regex from the user"""
@@ -25,7 +26,7 @@ def contains(_dict: Dict[str, str], content: str) -> bool:
     """Content is the key-value pair from the user."""
     key_value_pair = content.split(":")
 
-    _dict = dict((k.lower(), v.lower()) for k,v in _dict.items())
+    _dict = dict((k.lower(), v.lower()) for k, v in _dict.items())
 
     if len(key_value_pair) == 2 and _dict.get(key_value_pair[0]):
         value: str = key_value_pair[1]

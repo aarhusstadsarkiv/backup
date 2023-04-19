@@ -1,11 +1,12 @@
 from typing import Dict
-#filter_csv_generic
-import filter_csv_generic.id_field_ops as id_field_ops
-import filter_csv_generic.id_field_list_ops as id_field_list_ops
-import filter_csv_generic.date_field_ops as date_field_ops
-import filter_csv_generic.string_ops as string_ops
-import filter_csv_generic.dict_field_ops as dict_field_ops
-import filter_csv_generic.string_list_ops as string_list_ops
+
+# filter_csv_generic
+import backupsearch.id_field_ops as id_field_ops
+import backupsearch.id_field_list_ops as id_field_list_ops
+import backupsearch.date_field_ops as date_field_ops
+import backupsearch.string_ops as string_ops
+import backupsearch.dict_field_ops as dict_field_ops
+import backupsearch.string_list_ops as string_list_ops
 
 OPERATORS_ID_FIELD: dict = {
     "equalTo": id_field_ops.equal_to,

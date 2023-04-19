@@ -14,12 +14,10 @@ def regex(fieldname: str, pattern: str) -> bool:
 
 
 def equal_to(fieldname: str, content: str) -> bool:
-
     return fieldname.lower() == content
 
 
 def not_equal_to(fieldname: str, content: str) -> bool:
-
     return fieldname.lower() != content
 
 

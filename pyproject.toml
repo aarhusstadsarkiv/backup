@@ -1,29 +1,26 @@
 [project]
-name = "filter_csv_generic"
-version = "0.2.0"
+name = "backupsearch"
+version = "0.2.1"
 
 [tool.poetry]
-name = "filter_csv_generic"
+name = "backupsearch"
 version = "0.2.0"
 description = ""
 authors = ["Thomas <oeth@aarhus.dk>"]
-readme = "README.md"
 include = ["pyproject.toml"]
-# packages = [{include = "filter_csv_generic"}]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.12"
 pyinstaller = "^5.10.0"
 
 [tool.poetry.scripts]
-backupsearch = "filter_csv_generic.main:main"
+backupsearch = "backupsearch.main:main"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "*"
-pytest-cov = "*"
-black = "*"
-flake8 = "*"
-mypy = "*"
+coverage = "^7.2.3"
+black = "^23.3.0"
+ruff = "^0.0.261"
+mypy = "^1.2.0"
 
 [build-system]
 requires = ["poetry-core"]

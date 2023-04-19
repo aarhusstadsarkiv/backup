@@ -2,7 +2,6 @@ import re
 
 
 def regex(fieldname: str, pattern: str) -> bool:
-
     fieldname = fieldname.split(";")[1]
 
     if not fieldname:
@@ -17,7 +16,6 @@ def regex(fieldname: str, pattern: str) -> bool:
 
 
 def id_field_contains(fieldname: str, content: str) -> bool:
-
     # fieldname = fieldname.split(";")[1]
 
     if fieldname == "":
@@ -27,7 +25,6 @@ def id_field_contains(fieldname: str, content: str) -> bool:
 
 
 def equal_to(fieldname: str, content: str) -> bool:
-
     fieldname = fieldname.split(";")[0]
 
     if fieldname == "":
@@ -37,7 +34,6 @@ def equal_to(fieldname: str, content: str) -> bool:
 
 
 def not_equal_to(fieldname: str, content: str) -> bool:
-
     fieldname = fieldname.split(";")[0]
 
     if fieldname == "":
@@ -47,7 +43,6 @@ def not_equal_to(fieldname: str, content: str) -> bool:
 
 
 def greater_than(fieldname: str, content: str) -> bool:
-
     fieldname = fieldname.split(";")[0]
 
     if fieldname == "":
@@ -57,7 +52,6 @@ def greater_than(fieldname: str, content: str) -> bool:
 
 
 def less_than(fieldname: str, content: str) -> bool:
-
     fieldname = fieldname.split(";")[0]
 
     if fieldname == "":

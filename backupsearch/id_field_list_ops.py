@@ -15,7 +15,6 @@ def regex(fieldvalues: list, pattern: str) -> bool:
 
 
 def id_field_list_contains(fieldvalues: list, value: str) -> bool:
-
     if not fieldvalues:
         return False
 
@@ -60,7 +59,6 @@ def not_equal_to(fieldvalues: list, value: str) -> bool:
 
 
 def greater_than(fieldvalues: list, value: str) -> bool:
-
     if fieldvalues == []:
         return False
     else:
@@ -73,7 +71,6 @@ def greater_than(fieldvalues: list, value: str) -> bool:
 
 
 def less_than(fieldvalues: list, value: str) -> bool:
-
     if fieldvalues == []:
         return False
     else:

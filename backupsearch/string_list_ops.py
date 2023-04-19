@@ -1,6 +1,7 @@
 import re
 from typing import List
 
+
 def regex(fieldname: List[str], pattern: str) -> bool:
     if not fieldname:
         return False
