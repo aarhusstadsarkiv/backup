@@ -14,30 +14,36 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser(
         description=(
             "Backupsearch lets you generate filtered lists of record_ids from a backupfile.\n\n"
-            "You can print the output in the terminal or save it to one or more csv-files, that"
+            "You can print the output in the terminal or save it to one or more csv-files, that "
             "can be directly imported to SAM to create new update jobs.\n\n"
             "Use 'backupsearch list' to view information about all the possible search filters.\n"
             "Use 'backupsearch search' to search a given backup file."
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument(
-        "--version",
-        action="version",
-        version=metadata.version("backupsearch"),
-        help="Print the current version of this CLI",
+    parser.add_argument("--version", action="version", version=metadata.version("backupsearch"))
+
+    # subparsers
+    subs = parser.add_subparsers(
+        title="commands",
+        dest="command",
+        # description="description str, set to replace the {} list of commands",
+        # metavar="",
     )
-    subs = parser.add_subparsers(title="commands", dest="command")
+
+    # list subcommand
     subs.add_parser(
         "list",
         help="List all valid search fields and their associated operators",
         description=(
-            "Lists all the metadata fields that are available for filtering, along with the operators"
-            " that each field allows.\n\n"
+            "Lists all the metadata fields that are available for filtering, along with the "
+            "operators that each field allows.\n\n"
             "Use one or more of these metadata fields to filter the output from backupsearch."
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
+
+    # Search subcommand
     search = subs.add_parser(
         "search",
         help="Search a backupfile using multiple filters",
@@ -97,33 +103,36 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         action="append",
         help="Include one or more columns besides the default 'id'-column",
     )
-
-    args = parser.parse_args()
+    # print("argparse done")
+    # if not argv:
+    #     argv = Sequence(["--help"])
+    args = parser.parse_args(argv)
+    # print("vars(args):")
+    # print(vars(args))
 
     if args.command == "list":
-        print("Printing fields and operators...")
         for key in FIELDS_TRANSLATED.keys():
             print(key.ljust(25), end="")
             print(", ".join(FIELDS[FIELDS_TRANSLATED[key]].keys()))
         return 0
 
-    if args.command != "search":
-        sys.exit("You must choose a subcommand: 'filters' or 'search'")
+    elif args.command != "search":
+        raise NotImplementedError(f"Command {args.command} does not exist.")
 
     if args.csv_path:
         input_csv = Path(args.csv_path)
     if args.output_path:
         output_dir = Path(args.output_path)
 
-    filters: List[List[str]] = args.filter
-    extra_fields: List[List[str]] = args.field
+    filters: List[List[str]] = args.filter or []
+    extra_fields: List[List[str]] = args.field or []
+    header_print: List[str] = []
 
     if args.field:
-        header_print: List[str] = []
         header_print.append("id")
         for field in args.field:
-            header_print.append(field[0])
-
+            # header_print.append(field[0])
+            header_print.append(field)
     if not args.csv_path:
         sys.exit("No input csv database backup given...")
 
@@ -184,9 +193,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             to_add: List[Any] = [id_]
 
             for field in extra_fields:
-                header.append(field[0])
+                # header.append(field[0])
+                header.append(field)
 
-                fieldname = FIELDS_TRANSLATED[field[0]]
+                fieldname = FIELDS_TRANSLATED[field]
                 fieldvalue_ = _dict.get(fieldname, "")
 
                 to_add.append(json.dumps(fieldvalue_, ensure_ascii=False))
@@ -220,3 +230,4 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+    # exit(main())
