@@ -50,7 +50,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         description=(
             "Filters the csv formatted backup database:\n"
             "Apply any number of --filter \n"
-            "Use --filename to specify a custom filename for the output file(s).\n"
+            "Use --filestem to specify a custom filestem for the output file(s).\n"
             "\n\n"
             'ex.1 field is "id-field"\n'
             "--filter Samling equalTo 1\n"
@@ -94,7 +94,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         help="If the results are few, prints the results instead of generating csv file(s).",
     )
     search.add_argument(
-        "--filename", type=str, action="append", help="Specify the output filename(s)"
+        "--filestem", type=str, help="Specify the output filestem(s)"
     )  # remove action?
     search.add_argument("--or_", action="store_true", help="Use OR between filters")
     search.add_argument(
@@ -213,9 +213,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         max_file_size = 5000
         count = 0
         for i in range(0, len(output), max_file_size):
-            if args.filename:
-                custom_filename: str = args.filename[0][0]
-                csv_out_path = Path(output_dir, Path(custom_filename + f"_{count}.csv"))
+            if args.filestem:
+                custom_filestem: str = args.filestem
+                csv_out_path = Path(output_dir, Path(custom_filestem + f"_{count}.csv"))
             else:
                 csv_out_path = Path(output_dir, Path(f"filter_results_{count}.csv"))
 
@@ -225,6 +225,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 write.writerows(
                     output[i : i + max_file_size]
                 )  # writes data in blobs of max_file_size
+                count += 1
     return 0
 
 
