@@ -133,8 +133,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     if args.csv_path:
         input_csv = Path(args.csv_path)
-    if args.output_path:
-        output_dir = Path(args.output_path)
+    if args.output_dir:
+        output_dir = Path(args.output_dir)
 
     filters: List[List[str]] = args.filter or []
     extra_fields: List[str] = args.extra_field or []
@@ -146,27 +146,26 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             header_print.append(field)
 
     if not args.csv_path:
-        sys.exit("No input csv database backup given...")
+        sys.exit("Missing path to backup csv-file")
 
     if not args.filter:
-        sys.exit("No filters were given...")
+        sys.exit("At least one filter must be defined.")
 
     if not input_csv.suffix == ".csv":
-        sys.exit("input file is not a csv-file...")
+        sys.exit(f"Path to backup file does not point to a csv-file: {input_csv}")
 
     if not input_csv.exists():
-        sys.exit("input csv-file does not exists...")
+        sys.exit(f"Backup csv-file does not exists: {input_csv}")
 
-    if not args.output_path and not args.print:
-        sys.exit("No output path or --print...")
+    if not args.output_dir and not args.print:
+        sys.exit("You must use either --output-dir or --print")
 
-    if args.output_path and not output_dir.exists():
-        sys.exit("output directory does not exists. Please create one...")
+    if args.output_dir and not output_dir.exists():
+        sys.exit(f"Output directory must exist: {output_dir}")
 
-    print("Starting filtering process...")
     with open(input_csv, encoding="utf-8") as csvf:
         csvReader = csv.DictReader(csvf)
-
+        print("Started filtering backup file...")
         for row in csvReader:
             _dict: dict = json.loads(row["oasDictText"])
 
@@ -215,7 +214,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
             output.append(to_add)
 
-    print(f"Done: Found {len(output)} results matching the applied filter(s)")
+    print(f"Found {len(output)} results matching the applied filter(s)")
 
     if args.print:
         print(header_print)
@@ -229,7 +228,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 custom_filestem: str = args.filestem
                 csv_out_path = Path(output_dir, Path(custom_filestem + f"_{count}.csv"))
             else:
-                csv_out_path = Path(output_dir, Path(f"filter_results_{count}.csv"))
+                csv_out_path = Path(output_dir, Path(f"backup-search-results_{count}.csv"))
 
             with open(csv_out_path, "w", newline="", encoding="utf-8") as f:
                 write = csv.writer(f)
@@ -238,9 +237,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     output[i : i + max_file_size]
                 )  # writes data in blobs of max_file_size
                 count += 1
+        print(f"Finished writing csv-files to output-dir: {output_dir}")
     return 0
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-    # exit(main())
