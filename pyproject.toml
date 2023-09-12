@@ -1,17 +1,16 @@
 [tool.poetry]
 name = "backupsearch"
-version = "0.3.1"
+version = "0.3.3"
 description = ""
 authors = ["Thomas <oeth@aarhus.dk>"]
 include = ["pyproject.toml"]
-packages = [{include = "backupsearch"}]
+# packages = [{include = "backupsearch"}]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.12"
-pyinstaller = "^5.10.0"
 
 [tool.poetry.scripts]
-backupsearch = "backupsearch.main:main"
+backup = "backupsearch.main:main"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "^7.2.3"

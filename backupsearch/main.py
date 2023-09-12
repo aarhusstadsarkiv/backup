@@ -3,9 +3,19 @@ import sys
 from pathlib import Path
 import csv
 import argparse
+from argparse import _MutuallyExclusiveGroup
 from typing import List, Optional, Sequence, Any
-from importlib import metadata
 from backupsearch.settings import FIELDS, FIELDS_TRANSLATED
+
+
+def get_version() -> str:
+    version = "Ukendt version"
+    with open(Path(__file__).absolute().parent.parent / "pyproject.toml") as i:
+        for line in i.readlines():
+            if line.startswith("version"):
+                version = line[line.index('"') + 1 : -2]
+                break
+    return version
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -21,7 +31,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--version", action="version", version=metadata.version("backupsearch"))
+    parser.add_argument("--version", action="version", version=get_version())
 
     # subparsers
     subs = parser.add_subparsers(
@@ -38,7 +48,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         description=(
             "Lists all the metadata fields that are available for filtering, along with the "
             "operators that each field allows.\n\n"
-            "Use one or more of these metadata fields to filter the output from backupsearch."
+            "Use one or more of these metadata fields to filter the output from `backup search`"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -75,12 +85,29 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         type=str,
         help="Path to the backup database csv file.",
     )
-    search.add_argument(
-        "output_path",
-        metavar="output_dir",
-        type=str,
-        help="Path to the output/result directory for csv file(s).",
+
+    # print or save result
+    output_format: _MutuallyExclusiveGroup = search.add_mutually_exclusive_group(required=True)
+    output_format.add_argument(
+        "--output-dir", type=str, help="Path to the output directory for resulting csv file(s)."
     )
+    output_format.add_argument(
+        "--print",
+        action="store_true",
+        help="Print the results instead of saving to files",
+    )
+
+    search.add_argument(
+        "--filestem", type=str, help="If saving to csv-files, optionally specify the filestem"
+    )
+
+    search.add_argument(
+        "--extra-field",
+        type=str,
+        action="append",
+        help="Include one or more output columns besides the default 'id'-column",
+    )
+
     search.add_argument(
         "--filter",
         type=str,
@@ -88,27 +115,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         action="append",
         help="Add one or more filters to limit the results",
     )
+
     search.add_argument(
-        "--print",
-        action="store_true",
-        help="If the results are few, prints the results instead of generating csv file(s).",
+        "--or_", action="store_true", help="Use OR between filters instead of default AND"
     )
-    search.add_argument(
-        "--filestem", type=str, help="Specify the output filestem(s)"
-    )  # remove action?
-    search.add_argument("--or_", action="store_true", help="Use OR between filters")
-    search.add_argument(
-        "--field",
-        type=str,
-        action="append",
-        help="Include one or more columns besides the default 'id'-column",
-    )
-    # print("argparse done")
-    # if not argv:
-    #     argv = Sequence(["--help"])
+
     args = parser.parse_args(argv)
-    # print("vars(args):")
-    # print(vars(args))
 
     if args.command == "list":
         for key in FIELDS_TRANSLATED.keys():
@@ -117,7 +129,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0
 
     elif args.command != "search":
-        raise NotImplementedError(f"Command {args.command} does not exist.")
+        sys.exit(f"Command {args.command} does not exist.")
 
     if args.csv_path:
         input_csv = Path(args.csv_path)
@@ -125,14 +137,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         output_dir = Path(args.output_path)
 
     filters: List[List[str]] = args.filter or []
-    extra_fields: List[List[str]] = args.field or []
+    extra_fields: List[str] = args.extra_field or []
     header_print: List[str] = []
 
-    if args.field:
+    if extra_fields:
         header_print.append("id")
-        for field in args.field:
-            # header_print.append(field[0])
+        for field in extra_fields:
             header_print.append(field)
+
     if not args.csv_path:
         sys.exit("No input csv database backup given...")
 
@@ -207,7 +219,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     if args.print:
         print(header_print)
-        for row in output:
+        for row in output:  # type: ignore
             print(str(row))
     else:
         max_file_size = 5000
