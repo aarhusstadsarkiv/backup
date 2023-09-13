@@ -122,14 +122,18 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     args = parser.parse_args(argv)
 
-    if args.command == "list":
+    if not args.command:
+        sys.exit("You must use the 'list' or 'search' subcommand")
+
+    elif args.command == "list":
         for key in FIELDS_TRANSLATED.keys():
             print(key.ljust(25), end="")
             print(", ".join(FIELDS[FIELDS_TRANSLATED[key]].keys()))
-        return 0
+        sys.exit(0)
 
     elif args.command != "search":
-        sys.exit(f"Command {args.command} does not exist.")
+        # SystemExit(0, "No such command")
+        sys.exit(f"Subcommand {args.command} does not exist.")
 
     if args.csv_path:
         input_csv = Path(args.csv_path)
