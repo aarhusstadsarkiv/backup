@@ -1,5 +1,5 @@
 # Backup
-Commandline tool query the backup-files generated from our Google-based metadata-store ("oas"-backups). These backup files are located here `AFD-Aarhus Stadsarkiv/_DIGITALT_ARKIV/ark_meta_backup`
+Commandline tool used to query the backup-files generated from our Google-based metadata-store ("oas"-backups). These backup files are located here `AFD-Aarhus Stadsarkiv/_DIGITALT_ARKIV/ark_meta_backup`
 
 In time, a `fetch` subcommand that generated a new backup-file, will be implemented. For now only the `search` subcommand is in use
 
