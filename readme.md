@@ -1,5 +1,9 @@
-# Filters the backup database
-This filters the csv formatted backup database:
+# Backup
+Commandline tool query the backup-files generated from our Google-based metadata-store ("oas"-backups). These backup files are located here `AFD-Aarhus Stadsarkiv/_DIGITALT_ARKIV/ark_meta_backup`
+
+In time, a `fetch` subcommand that generated a new backup-file, will be implemented. For now only the `search` subcommand is in use
+
+
 Apply any number of --filter.
 ## --filter [field] [operator] [value]:
 ex. --filter Samling contains Salling. Value is the variable user input.
