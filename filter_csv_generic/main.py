@@ -2,8 +2,7 @@ import json
 from pathlib import Path
 import csv
 import argparse
-from settings import FIELDS, FIELDS_TRANSLATED
-
+from filter_csv_generic.settings import FIELDS, FIELDS_TRANSLATED
 
 
 def get_version() -> str:
@@ -38,8 +37,8 @@ def main(args=None):
             "ex.4 the field is a dictionary and the key is known and filter on the value:\n"
             '--filter "Beskrivelsesdata" contains Typer:Farve\n\n'
             'ex.5 use the "null" keyword to filter for any entry has a certain field:\n'
-            '--filter Samling equalTo null or --filter Samling notEqualTo null\n\n'
-            'All user inputs are case-insensitive. Field names are case-sensitive.'
+            "--filter Samling equalTo null or --filter Samling notEqualTo null\n\n"
+            "All user inputs are case-insensitive. Field names are case-sensitive."
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -58,7 +57,9 @@ def main(args=None):
         help="Path to the output/result directory for csv file(s).",
     )
     parser.add_argument(
-        "--print", action="store_true", help="If the results are few, prints the results instead of generating csv file(s)."
+        "--print",
+        action="store_true",
+        help="If the results are few, prints the results instead of generating csv file(s).",
     )
     parser.add_argument(
         "--filter",
@@ -80,13 +81,16 @@ def main(args=None):
 
     parser.add_argument(
         "--filename", type=str, nargs=1, action="append", help="specify the output filename(s)."
-    )#remove action?
+    )  # remove action?
     parser.add_argument("--or_", action="store_true", help="the filters are or'ed together.")
 
     parser.add_argument(
-        "--field", type=str, nargs=1, action="append", help="if specified, adds extra data field in results file(s)."
+        "--field",
+        type=str,
+        nargs=1,
+        action="append",
+        help="if specified, adds extra data field in results file(s).",
     )
-
 
     args = parser.parse_args(args)
 
@@ -105,8 +109,6 @@ def main(args=None):
     if args.output_path:
         output_dir = Path(args.output_path)
 
-    
-
     filters: list[list[str]] = args.filter
     extra_fields: list[list[str]] = args.field
 
@@ -114,15 +116,15 @@ def main(args=None):
         header_print: list[str] = []
         header_print.append("id")
         for field in args.field:
-            
-            header_print.append(field[0])            
+
+            header_print.append(field[0])
 
     # -----input validation-------------------------------------------------
     if not args.csv_path:
         exit("No input csv database backup given...")
 
     if not args.filter:
-        exit("No filters were given...")    
+        exit("No filters were given...")
 
     csv_path = input_csv
     if not csv_path.suffix == ".csv":
@@ -143,7 +145,7 @@ def main(args=None):
         csvReader = csv.DictReader(csvf)
 
         for row in csvReader:
-            _dict: dict = json.loads(row["oasDictText"])            
+            _dict: dict = json.loads(row["oasDictText"])
 
             operators_results: list[bool] = []
 
@@ -156,25 +158,19 @@ def main(args=None):
                 fieldvalue: str = args.filter[i][2]
                 fieldvalue = fieldvalue.lower()
 
-                if (
-                    fieldvalue == "null"
-                    and operator_key == "equalTo"
-                    and not _dict.get(fieldname)
-                ):
-                    op_results = True
-                elif (
-                    fieldvalue == "null"
-                    and operator_key == "notEqualTo"
-                    and _dict.get(fieldname)
-                ):
-                    op_results = True
-                elif not _dict.get(fieldname):
-                    op_results = False
+                if fieldvalue == "null" and operator_key == "equalTo" and not _dict.get(fieldname):
+                    op_result = True
+                elif fieldvalue == "null" and operator_key == "equalTo" and _dict.get(fieldname):
+                    op_result = False
+                elif fieldvalue == "null" and operator_key == "notEqualTo" and _dict.get(fieldname):
+                    op_result = True
+                elif not _dict.get(fieldname) and operator_key != "notExists":
+                    op_result = False
                 else:
                     operator = FIELDS[fieldname][operator_key]
-                    op_results = operator(_dict[fieldname], fieldvalue)
+                    op_result = operator(_dict.get(fieldname), fieldvalue)
 
-                operators_results.append(op_results)
+                operators_results.append(op_result)
 
             if args.or_:
                 total_op_result = any(operators_results)
@@ -183,24 +179,31 @@ def main(args=None):
 
             if not total_op_result:
                 continue  # if false
-            
+
             id = row["id"]
             header: list[str] = ["id"]
             to_add: list[str] = [id]
 
             if extra_fields:
                 for field in extra_fields:
-                    
+
                     header.append(field[0])
 
                     fieldname = FIELDS_TRANSLATED[field[0]]
                     fieldvalue_ = _dict.get(fieldname, "")
-                    
+
                     to_add.append(json.dumps(fieldvalue_, ensure_ascii=False))
 
-            output.append(to_add)   # if true            
+            output.append(to_add)  # if true
 
     print("Done: Found " + str(len(output)) + " results matching the applied filter(s)")
+
+    if not len(output) == 0 and not args.print:
+        csv_out_path = Path(output_dir, Path("filter_results_total.csv"))
+        with open(csv_out_path, "w", newline="", encoding="utf-8") as f:
+            write = csv.writer(f)
+            write.writerow(header)
+            write.writerows(output)
 
     if not args.print:
         max_file_size = 5000
@@ -213,10 +216,12 @@ def main(args=None):
             else:
                 csv_out_path = Path(output_dir, Path("filter_results_" + str(count) + ".csv"))
 
-            with open(csv_out_path, "w", newline="", encoding='utf-8') as f:
-                write = csv.writer(f)            
+            with open(csv_out_path, "w", newline="", encoding="utf-8") as f:
+                write = csv.writer(f)
                 write.writerow(header)
-                write.writerows(output[i : i + max_file_size])  # writes data in blobs of max_file_size
+                write.writerows(
+                    output[i : i + max_file_size]
+                )  # writes data in blobs of max_file_size
 
             count += 1
     else:

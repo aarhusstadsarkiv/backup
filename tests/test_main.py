@@ -1,10 +1,12 @@
 import sys
 import os
 
+from filter_csv_generic.main import main
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-from filter_csv_generic.main import main
+
 # ---------OR-----------------------------------------------------------------------------------------
 
 
@@ -32,7 +34,7 @@ def test_OPERATORS_DICT_FIELD_or(capfd):
 
     out, err = capfd.readouterr()
 
-    assert out.__contains__("13") and err == ""
+    assert out.__contains__("14") and err == ""
 
 
 # --------OPERATORS_ID_FIELD-------------------------------------------------------------------------
@@ -137,7 +139,7 @@ def test_OPERATORS_ID_FIELD_LIST_regex(capfd):
 
     out, err = capfd.readouterr()
 
-    assert out.__contains__("13") and err == ""
+    assert out.__contains__("14") and err == ""
 
 
 def test_OPERATORS_ID_FIELD_LIST_equalTo(capfd):
@@ -222,7 +224,7 @@ def test_OPERATORS_ID_FIELD_LIST_lessThan(capfd):
 
     out, err = capfd.readouterr()
 
-    assert out.__contains__("13") and err == ""
+    assert out.__contains__("14") and err == ""
 
 
 # --------OPERATORS_DATE_FIELD---------------------------------------------------------------------------
@@ -289,7 +291,7 @@ def test_OPERATORS_DATE_FIELD_greaterThan(capfd):
 
     out, err = capfd.readouterr()
 
-    assert out.__contains__("10") and err == ""
+    assert out.__contains__("11") and err == ""
 
 
 def test_OPERATORS_DATE_FIELD_lessThan(capfd):
