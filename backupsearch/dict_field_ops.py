@@ -1,8 +1,21 @@
 import re
-from typing import Dict
 
 
-def regex(_dict: Dict[str, str], pattern: str) -> bool:
+def exists(_dict: dict, content: str) -> bool:
+    if not _dict:
+        return False
+    else:
+        return True
+
+
+def notExists(_dict: dict, content: str) -> bool:
+    if not _dict:
+        return True
+    else:
+        return False
+
+
+def regex(_dict: dict[str, str], pattern: str) -> bool:
     """_dict is the dictionary from the backup database csv."""
     """pattern is the regex from the user"""
     if not _dict:
@@ -21,7 +34,11 @@ def hasKey(_dict: dict, content: str) -> bool:
     return content in [k.lower() for k in _dict.keys()]
 
 
-def contains(_dict: Dict[str, str], content: str) -> bool:
+def notHasKey(_dict: dict, key: str) -> bool:
+    return key not in [k.lower() for k in _dict.keys()]
+
+
+def contains(_dict: dict[str, str], content: str) -> bool:
     """_dict is the dictionary from the backup database csv."""
     """Content is the key-value pair from the user."""
     key_value_pair = content.split(":")

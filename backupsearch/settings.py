@@ -38,6 +38,9 @@ OPERATORS_STRING_FIELD: dict = {
     "regex": string_ops.regex,
 }
 OPERATORS_DICT_FIELD: dict = {
+    "notHasKey": dict_field_ops.notHasKey,
+    "exists": dict_field_ops.exists,
+    "notExists": dict_field_ops.notExists,
     "hasKey": dict_field_ops.hasKey,
     "contains": dict_field_ops.contains,
     "regex": dict_field_ops.regex,
