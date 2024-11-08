@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "backupsearch"
-version = "0.4.1"
+version = "0.4.2"
 description = ""
 authors = ["Thomas <oeth@aarhus.dk>"]
 include = ["pyproject.toml"]
 # packages = [{include = "backupsearch"}]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.12"
+python = ">=3.8"
 
 [tool.poetry.scripts]
 backup = "backupsearch.main:main"
