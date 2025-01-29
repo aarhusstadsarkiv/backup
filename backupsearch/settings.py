@@ -16,7 +16,6 @@ import backupsearch.string_list_ops as string_list_ops
 # import string_list_ops as string_list_ops
 
 
-
 OPERATORS_ID_FIELD: dict = {
     "equalTo": id_field_ops.equal_to,
     "notEqualTo": id_field_ops.not_equal_to,

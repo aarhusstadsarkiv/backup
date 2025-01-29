@@ -7,9 +7,10 @@ from argparse import _MutuallyExclusiveGroup
 from typing import List, Optional, Sequence, Any
 import os
 
-#from backupsearch.settings import FIELDS, FIELDS_TRANSLATED
+# from backupsearch.settings import FIELDS, FIELDS_TRANSLATED
 from backupsearch.settings import FIELDS, FIELDS_TRANSLATED
 from backupsearch.fetch_data import fetch_main
+
 
 def get_version() -> str:
     version = "Ukendt version"
@@ -44,33 +45,34 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         # metavar="",
     )
 
-    #--------fetch--------------------------------------------------------------------------------------
+    # --------fetch---------------------------------------------------------------------------------
     fetch = subs.add_parser(
         "fetch",
         help="Fetch backup-files from Google Cloud Platform",
-        description=(
-            "Fetch backup files from Google Cloud Platform.\n\n",
-            "Use it to download backups of 'records', 'entities', 'relations' and 'acquisitions'.\n",
-            "By default all backups are downloaded, use any number of --type to filter which files to fetch.\n\n",
-            "Example:\n",
-            "backup fetch --type records --output-dir z:/backups/GCP"
-        ),
+        description="""
+            Fetch backup files from Google Cloud Platform.\n\n,
+            Use it to download backups of 'records', 'entities', 'relations' and 'acquisitions'.\n
+            By default all backups are downloaded, use any number of --type to filter which files 
+            to fetch.\n\n
+            Example:\n
+            backup fetch --type records --output-dir z:/backups/GCP            
+            """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     fetch.add_argument(
         "--type",
         metavar="backup_type",
-        nargs='+',
+        nargs="+",
         # action='append',
         type=str,
         help="",
-        choices=['records', 'entities', 'relations', 'acquisitions']
+        choices=["records", "entities", "relations", "acquisitions"],
     )
 
     fetch.add_argument(
         "--key",
         metavar="secret_key",
-        nargs='?',
+        nargs="?",
         type=str,
         help="Key for fetching online data...",
     )
@@ -81,8 +83,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         type=Path,
         help="Specify path to csv output",
     )
-    #---------------------------------------------------------------------------------------------------
-
+    # ----------------------------------------------------------------------------------------------
 
     # list subcommand
     subs.add_parser(
@@ -165,7 +166,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     args = parser.parse_args(argv)
 
-    #----------------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------
 
     if args.key:
         os.environ["secret_key"] = args.key
@@ -173,11 +174,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         config_file: Path = Path.home() / ".backup.config"
         if not config_file.exists() and args.command == "fetch":
             print(f"Specify secret key in {config_file} to enable fetch...")
-            with open(config_file, "w", encoding='utf-8', newline='\n') as file:
-                to_file: dict = {"secret_key" : ""}
+            with open(config_file, "w", encoding="utf-8", newline="\n") as file:
+                to_file: dict = {"secret_key": ""}
                 file.write(json.dumps(to_file))
         else:
-            with open(config_file, "r", encoding='utf-8', newline='\n') as file:
+            with open(config_file, "r", encoding="utf-8", newline="\n") as file:
                 print("Loading secret key for fetch...")
                 content = file.read()
                 json_content: dict = json.loads(content)
@@ -187,7 +188,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 else:
                     sys.exit(f"No secret key specified in {config_file}")
 
-    #----------------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------
 
     if not args.command:
         sys.exit("You must use the 'list' or 'search' subcommand")
@@ -202,7 +203,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     #     # SystemExit(0, "No such command")
     #     sys.exit(f"Subcommand {args.command} does not exist.")
 
-    #--fetch-----------------------------------------------------------------------------------
+    # --fetch-----------------------------------------------------------------------------------
 
     if args.command == "fetch":
         fetch_main(types=args.type, output_dir=args.fetch_output_dir)
@@ -212,7 +213,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     #     sys.exit("You must supply an `--output-dir`")
     # if not Path(args.output_dir):
     #     sys.exit(f"Unable to parse the supplied output-dir as a Path: {args.output_dir}")
-    #------------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------------
 
     if args.csv_path:
         input_csv = Path(args.csv_path)
