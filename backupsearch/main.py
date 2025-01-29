@@ -5,7 +5,11 @@ import csv
 import argparse
 from argparse import _MutuallyExclusiveGroup
 from typing import List, Optional, Sequence, Any
+import os
+
+# from backupsearch.settings import FIELDS, FIELDS_TRANSLATED
 from backupsearch.settings import FIELDS, FIELDS_TRANSLATED
+from backupsearch.fetch_data import fetch_main
 
 
 def get_version() -> str:
@@ -40,6 +44,46 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         # description="description str, set to replace the {} list of commands",
         # metavar="",
     )
+
+    # --------fetch---------------------------------------------------------------------------------
+    fetch = subs.add_parser(
+        "fetch",
+        help="Fetch backup-files from Google Cloud Platform",
+        description="""
+            Fetch backup files from Google Cloud Platform.\n\n,
+            Use it to download backups of 'records', 'entities', 'relations' and 'acquisitions'.\n
+            By default all backups are downloaded, use any number of --type to filter which files 
+            to fetch.\n\n
+            Example:\n
+            backup fetch --type records --output-dir z:/backups/GCP            
+            """,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    fetch.add_argument(
+        "--type",
+        metavar="backup_type",
+        nargs="+",
+        # action='append',
+        type=str,
+        help="",
+        choices=["records", "entities", "relations", "acquisitions"],
+    )
+
+    fetch.add_argument(
+        "--key",
+        metavar="secret_key",
+        nargs="?",
+        type=str,
+        help="Key for fetching online data...",
+    )
+
+    fetch.add_argument(
+        "--fetch-output-dir",
+        metavar="fetch_output_dir_",
+        type=Path,
+        help="Specify path to csv output",
+    )
+    # ----------------------------------------------------------------------------------------------
 
     # list subcommand
     subs.add_parser(
@@ -122,6 +166,30 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     args = parser.parse_args(argv)
 
+    # ----------------------------------------------------------------------------------------
+
+    if args.command == "fetch" and args.key:
+        os.environ["secret_key"] = args.key
+    elif args.command == "fetch" and not args.key:
+        config_file: Path = Path.home() / ".backup.config"
+        if not config_file.exists() and args.command == "fetch":
+            print(f"Specify secret key in {config_file} to enable fetch...")
+            with open(config_file, "w", encoding="utf-8", newline="\n") as file:
+                to_file: dict = {"secret_key": ""}
+                file.write(json.dumps(to_file))
+        else:
+            with open(config_file, "r", encoding="utf-8", newline="\n") as file:
+                print("Loading secret key for fetch...")
+                content = file.read()
+                json_content: dict = json.loads(content)
+                if json_content.get("secret_key"):
+                    os.environ["secret_key"] = json_content["secret_key"]
+                    print("Loaded: Secret key for fetch...ok.")
+                else:
+                    sys.exit(f"No secret key specified in {config_file}")
+
+    # ----------------------------------------------------------------------------------------
+
     if not args.command:
         sys.exit("You must use the 'list' or 'search' subcommand")
 
@@ -131,12 +199,25 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             print(", ".join(FIELDS[FIELDS_TRANSLATED[key]].keys()))
         sys.exit(0)
 
-    elif args.command != "search":
-        # SystemExit(0, "No such command")
-        sys.exit(f"Subcommand {args.command} does not exist.")
+    # elif args.command != "search":
+    #     # SystemExit(0, "No such command")
+    #     sys.exit(f"Subcommand {args.command} does not exist.")
+
+    # --fetch-----------------------------------------------------------------------------------
+
+    if args.command == "fetch":
+        fetch_main(types=args.type, output_dir=args.fetch_output_dir)
+        pass
+
+    # if not args.output_dir:
+    #     sys.exit("You must supply an `--output-dir`")
+    # if not Path(args.output_dir):
+    #     sys.exit(f"Unable to parse the supplied output-dir as a Path: {args.output_dir}")
+    # ------------------------------------------------------------------------------------------
 
     if args.csv_path:
         input_csv = Path(args.csv_path)
+
     if args.output_dir:
         output_dir = Path(args.output_dir)
 
