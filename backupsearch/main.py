@@ -168,7 +168,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     # ----------------------------------------------------------------------------------------
 
-    if args.key:
+    if args.command == "fetch" and args.key:
         os.environ["secret_key"] = args.key
     elif args.command == "fetch" and not args.key:
         config_file: Path = Path.home() / ".backup.config"
