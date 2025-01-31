@@ -50,7 +50,21 @@ def fetch_backup(operation: str, output_dir: Path, cursor: Optional[str] = None)
     month: int = datetime.date.today().month
     day: int = datetime.date.today().day
     # 2024-03-15_oas_backup.csv
-    output_dir = output_dir / f"{year}-{month}-{day}_{output_filenames[operation]}.csv"
+
+    month_: str = ""
+    day_: str = ""
+
+    if month < 10:
+        month_: str = f"0{month}"
+    else:
+        month_: str = f"{month}"
+
+    if day < 10:
+        day_: str = f"0{day}"
+    else:
+        day_: str = f"{day}"
+
+    output_dir = output_dir / f"{year}-{month_}-{day_}_{output_filenames[operation]}.csv"
 
     if output_dir.exists():
         print(f"Output file {output_dir} exits...deleting...")
