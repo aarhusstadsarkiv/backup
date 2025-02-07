@@ -10,16 +10,16 @@ import os
 # from backupsearch.settings import FIELDS, FIELDS_TRANSLATED
 from backupsearch.settings import FIELDS, FIELDS_TRANSLATED
 from backupsearch.fetch_data import fetch_main
+from backupsearch import __version__
 
-
-def get_version() -> str:
-    version = "Ukendt version"
-    with open(Path(__file__).absolute().parent.parent / "pyproject.toml") as i:
-        for line in i.readlines():
-            if line.startswith("version"):
-                version = line[line.index('"') + 1 : -2]
-                break
-    return version
+# def get_version() -> str:
+#     version = "Ukendt version"
+#     with open(Path(__file__).absolute().parent.parent / "pyproject.toml") as i:
+#         for line in i.readlines():
+#             if line.startswith("version"):
+#                 version = line[line.index('"') + 1 : -2]
+#                 break
+#     return version
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -35,7 +35,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--version", action="version", version=get_version())
+    # parser.add_argument("--version", action="version", version=get_version())
+    # parser.add_argument("--version", action="version", version=metadata.version("backupsearch"))
+    parser.add_argument("--version", action="version", version=__version__)
 
     # subparsers
     subs = parser.add_subparsers(

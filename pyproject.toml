@@ -1,17 +1,32 @@
+[build-system]
+requires = [ "poetry-core",]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "backupsearch"
-version = "0.4.3"
+version = "0.4.8"
 description = ""
-authors = ["Thomas <oeth@aarhus.dk>"]
-include = ["pyproject.toml"]
-# packages = [{include = "backupsearch"}]
+authors = [ "Thomas <oeth@aarhus.dk>",]
+include = [ "pyproject.toml",]
+[[tool.poetry.packages]]
+include = "backupsearch"
+
+[tool.black]
+line-length = 100
+
+[tool.ruff]
+line-length = 100
+exclude = [ "tests",]
 
 [tool.poetry.dependencies]
-python = ">=3.8"
+python = ">=3.12"
 requests = "^2.32.3"
 
 [tool.poetry.scripts]
-backup = "backupsearch.main:main"
+backup = "backupsearch.backup:main"
+
+[tool.pytest.ini_options]
+pythonpath = [ ".",]
 
 [tool.poetry.group.dev.dependencies]
 coverage = "^7.2.3"
@@ -19,17 +34,3 @@ black = "^23.3.0"
 ruff = "^0.0.261"
 mypy = "^1.2.0"
 pytest = "^7.3.1"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.pytest.ini_options]
-pythonpath = ["."]
-
-[tool.black]
-line-length = 100
-
-[tool.ruff]
-line-length = 100
-exclude = ["tests"]
