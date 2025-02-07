@@ -9,6 +9,7 @@ packages = [{include = "backupsearch"}]
 [tool.poetry.dependencies]
 python = ">=3.12"
 requests = "^2.32.3"
+importlib = "^1.0.4"
 
 [tool.poetry.scripts]
 backup = "backupsearch.backup:main"
