@@ -6,12 +6,11 @@ import argparse
 from argparse import _MutuallyExclusiveGroup
 from typing import List, Optional, Sequence, Any
 import os
-from importlib import metadata
 
 # from backupsearch.settings import FIELDS, FIELDS_TRANSLATED
 from backupsearch.settings import FIELDS, FIELDS_TRANSLATED
 from backupsearch.fetch_data import fetch_main
-
+from backupsearch import __version__
 
 # def get_version() -> str:
 #     version = "Ukendt version"
@@ -37,7 +36,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     # parser.add_argument("--version", action="version", version=get_version())
-    parser.add_argument("--version", action="version", version=metadata.version("backupsearch"))
+    # parser.add_argument("--version", action="version", version=metadata.version("backupsearch"))
+    parser.add_argument("--version", action="version", version=__version__)
 
     # subparsers
     subs = parser.add_subparsers(
