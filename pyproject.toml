@@ -7,7 +7,7 @@ include = ["pyproject.toml"]
 packages = [{include = "backupsearch"}]
 
 [tool.poetry.dependencies]
-python = ">=3.8"
+python = ">=3.12"
 requests = "^2.32.3"
 
 [tool.poetry.scripts]
