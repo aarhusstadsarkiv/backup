@@ -4,7 +4,7 @@ version = "0.4.6"
 description = ""
 authors = ["Thomas <oeth@aarhus.dk>"]
 include = ["pyproject.toml"]
-# packages = [{include = "backupsearch"}]
+packages = [{include = "backupsearch"}]
 
 [tool.poetry.dependencies]
 python = ">=3.8"
