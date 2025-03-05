@@ -23,3 +23,6 @@ def not_equal_to(fieldname: str, content: str) -> bool:
 
 def contains(fieldname: str, content: str) -> bool:
     return content in fieldname.lower()
+
+def not_contains(fieldname: str, content: str) -> bool:
+    return content not in fieldname.lower()
