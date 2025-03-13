@@ -41,7 +41,7 @@ def notHasKey(_dict: dict, key: str) -> bool:
 def contains(_dict: dict[str, str], content: str) -> bool:
     """_dict is the dictionary from the backup database csv."""
     """Content is the key-value pair from the user."""
-    key_value_pair = content.split(":")
+    key_value_pair = content.split(":", 1)
 
     _dict = dict((k.lower(), v.lower()) for k, v in _dict.items())
 

@@ -43,6 +43,7 @@ OPERATORS_STRING_FIELD: dict = {
     "equalTo": string_ops.equal_to,
     "notEqualTo": string_ops.not_equal_to,
     "contains": string_ops.contains,
+    "notContains": string_ops.not_contains,
     "regex": string_ops.regex,
 }
 OPERATORS_DICT_FIELD: dict = {

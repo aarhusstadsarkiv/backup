@@ -55,14 +55,14 @@ def fetch_backup(operation: str, output_dir: Path, cursor: Optional[str] = None)
     day_: str = ""
 
     if month < 10:
-        month_: str = f"0{month}"
+        month_ = f"0{month}"
     else:
-        month_: str = f"{month}"
+        month_ = f"{month}"
 
     if day < 10:
-        day_: str = f"0{day}"
+        day_ = f"0{day}"
     else:
-        day_: str = f"{day}"
+        day_ = f"{day}"
 
     output_dir = output_dir / f"{year}-{month_}-{day_}_{output_filenames[operation]}.csv"
 

@@ -260,7 +260,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
             for i in range(len(filters)):  # i is filter No.
                 fieldname: str = args.filter[i][0]
-                fieldname = FIELDS_TRANSLATED[fieldname]
+                # fieldname = FIELDS_TRANSLATED[fieldname]
+
+                fieldname_lower: str = fieldname.lower()
+
+                for key in FIELDS_TRANSLATED:
+                    if key.lower() == fieldname_lower:
+                        fieldname = FIELDS_TRANSLATED[key]
+                        break
 
                 operator_key: str = args.filter[i][1]
                 fieldvalue: str = args.filter[i][2]
