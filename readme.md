@@ -108,3 +108,8 @@ OPERATORS_STRING_FIELD_LIST: dict = {
     "regex": like contains, searches for pattern matching in any string in the list
 }
 ```
+
+## Releases
+Pyinstaller virker (indtil videre!) med følgende kald:
+
+`poetry run pyinstaller --onefile --name backup .\backupsearch\backup.py`
