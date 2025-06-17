@@ -27,7 +27,6 @@ jobs:
 
   pytest:
     name: pytest
-    needs: version-database
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
