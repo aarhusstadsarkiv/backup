@@ -1,7 +1,7 @@
 import pytest
 import sys
 import os
-from backupsearch import backup
+from backup import backup
 
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -451,10 +451,7 @@ def test_OPERATORS_STRING_FIELD_equalTo(capfd):
         "--filter",
         "Beskrivelsesnoter",
         "equalTo",
-        (
-            "Tekstindholdet af dette kartotekskort er afskrevet af frivillige"
-            ", men selve kortet er ikke digitaliseret."
-        ),
+        ("Tekstindholdet af dette kartotekskort er afskrevet af frivillige, men selve kortet er ikke digitaliseret."),
     ]
 
     backup.main(args)

@@ -1,20 +1,9 @@
-from typing import Dict
-
-# filter_csv_generic
-import backupsearch.id_field_ops as id_field_ops
-import backupsearch.id_field_list_ops as id_field_list_ops
-import backupsearch.date_field_ops as date_field_ops
-import backupsearch.string_ops as string_ops
-import backupsearch.dict_field_ops as dict_field_ops
-import backupsearch.string_list_ops as string_list_ops
-
-# import id_field_ops as id_field_ops
-# import id_field_list_ops as id_field_list_ops
-# import date_field_ops as date_field_ops
-# import string_ops as string_ops
-# import dict_field_ops as dict_field_ops
-# import string_list_ops as string_list_ops
-
+import backup.date_field_ops as date_field_ops
+import backup.dict_field_ops as dict_field_ops
+import backup.id_field_list_ops as id_field_list_ops
+import backup.id_field_ops as id_field_ops
+import backup.string_list_ops as string_list_ops
+import backup.string_ops as string_ops
 
 OPERATORS_ID_FIELD: dict = {
     "equalTo": id_field_ops.equal_to,
@@ -116,7 +105,7 @@ FIELDS: dict = {
     "objects": OPERATORS_STRING_FIELD_LIST,
 }
 # translation between gui and backend fields:
-FIELDS_TRANSLATED: Dict[str, str] = {
+FIELDS_TRANSLATED: dict[str, str] = {
     "Seneste dato": "date_to",
     "Tidligste dato": "date_from",
     "BEGIVENHEDER": "events",

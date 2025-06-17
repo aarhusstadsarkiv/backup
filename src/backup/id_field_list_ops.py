@@ -7,52 +7,42 @@ def regex(fieldvalues: list, pattern: str) -> bool:
 
     p = re.compile(pattern)
 
-    for x in fieldvalues:
-        if p.findall(x):
-            return True
-
-    return False
+    return any(p.findall(x) for x in fieldvalues)
 
 
 def id_field_list_contains(fieldvalues: list, value: str) -> bool:
     if not fieldvalues:
         return False
 
-    for x in fieldvalues:
-        if value in x.lower():
-            return True
-    return False
+    return any(value in x.lower() for x in fieldvalues)
 
 
 def equal_to(fieldvalues: list, value: str) -> bool:
-    """fieldvalues from the csv database in the form [""1;Aarhus Stadsarkiv""]"""
-    """value is user input"""
+    """Fieldvalues from the csv database in the form [""1;Aarhus Stadsarkiv""].
+
+    value is user input
+    """
     if fieldvalues == []:
         return False
     else:
         for i in range(0, len(fieldvalues), 1):
             entry_content_str = fieldvalues[i].split(";")[1]
             entry_content_int = fieldvalues[i].split(";")[0]
-            if value == entry_content_str.lower():
-                return True
-            elif value == entry_content_int:
+            if value == entry_content_str.lower() or value == entry_content_int:
                 return True
 
         return False
 
 
 def not_equal_to(fieldvalues: list, value: str) -> bool:
-    """Same as above, but negative search"""
-
+    """Same as above, but negative search."""
     if fieldvalues == []:
         return False
     else:
         for i in range(0, len(fieldvalues), 1):
             entry_content_str = fieldvalues[i].split(";")[1]
             entry_content_int = fieldvalues[i].split(";")[0]
-            if value != entry_content_str.lower():
-                return True
-            elif value != entry_content_int:
+            if value != entry_content_str.lower() or value != entry_content_int:
                 return True
 
         return False

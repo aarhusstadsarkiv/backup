@@ -8,9 +8,9 @@ tests/test_data/results/
 build/
 dist/
 results/
-*.spec
 .ruff_cache/
 .pytest_cache/
 .mypy_cache/
-new_version.py
 .env
+.coverage
+*.spec
