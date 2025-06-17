@@ -34,7 +34,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version-file: "pyproject.toml"
-      - uses: actions/setup-go@v5
       - run: uv sync --all-extras --dev
       - name: Unit test
         run: uv run -m pytest
