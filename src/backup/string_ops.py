@@ -7,10 +7,7 @@ def regex(fieldname: str, pattern: str) -> bool:
 
     p = re.compile(pattern)
 
-    if p.findall(fieldname):
-        return True
-
-    return False
+    return bool(p.findall(fieldname))
 
 
 def equal_to(fieldname: str, content: str) -> bool:

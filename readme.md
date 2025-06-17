@@ -3,6 +3,7 @@ Commandline tool used to query the backup-files generated from our Google-based 
 
 In time, a `fetch` subcommand that generated a new backup-file, will be implemented. For now only the `search` subcommand is in use
 
+NOTE: The pyinstaller-command needs to be documented
 
 Apply any number of --filter.
 ## --filter [field] [operator] [value]:

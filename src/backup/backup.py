@@ -1,37 +1,32 @@
-import json
-import sys
-from pathlib import Path
-import csv
 import argparse
-from argparse import _MutuallyExclusiveGroup
-from typing import List, Optional, Sequence, Any
+import csv
+import json
 import os
+import sys
+from argparse import _MutuallyExclusiveGroup
+from collections.abc import Sequence
+from pathlib import Path
+from typing import Any
+from typing import Optional
 
-# from backupsearch.settings import FIELDS, FIELDS_TRANSLATED
-from backupsearch.settings import FIELDS, FIELDS_TRANSLATED
-from backupsearch.fetch_data import fetch_main
-from backupsearch import __version__
-
-# def get_version() -> str:
-#     version = "Ukendt version"
-#     with open(Path(__file__).absolute().parent.parent / "pyproject.toml") as i:
-#         for line in i.readlines():
-#             if line.startswith("version"):
-#                 version = line[line.index('"') + 1 : -2]
-#                 break
-#     return version
+from backup import __version__
+from backup.fetch_data import fetch_main
+from backup.settings import FIELDS
+from backup.settings import FIELDS_TRANSLATED
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
-    output: List[List[Any]] = []
+    output: list[list[Any]] = []
 
     parser = argparse.ArgumentParser(
         description=(
-            "Backupsearch lets you generate filtered lists of record_ids from a backupfile.\n\n"
-            "You can print the output in the terminal or save it to one or more csv-files, that "
+            "Backup lets you fetch backup files from Google Cloud Platform, and generate\n"
+            "filtered lists of record_ids from the fetched backup files.\n\n"
+            "You can print the output in the terminal or save it to one or more csv-files, that\n"
             "can be directly imported to SAM to create new update jobs.\n\n"
-            "Use 'backupsearch list' to view information about all the possible search filters.\n"
-            "Use 'backupsearch search' to search a given backup file."
+            "Use 'backup fetch' to fetch backup files of records, registrations, entities, jobs...\n"
+            "Use 'backup list' to view information about all the possible search filters.\n"
+            "Use 'backup search' to search a given backup file."
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -49,14 +44,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     fetch = subs.add_parser(
         "fetch",
         help="Fetch backup-files from Google Cloud Platform",
-        description="""
-            Fetch backup files from Google Cloud Platform.\n\n,
-            Use it to download backups of 'records', 'entities', 'relations' and 'acquisitions'.\n
-            By default all backups are downloaded, use any number of --type to filter which files 
-            to fetch.\n\n
-            Example:\n
-            backup fetch --type records --output-dir z:/backups/GCP            
-            """,
+        description=(
+            "Fetch backup files from Google Cloud Platform.\n\n"
+            "Use it to download backups of 'records', 'entities', 'relations', 'acquisitions',\n"
+            "'registrations' and 'updates'.By default all backups are downloaded, use any number \n"
+            "of --type to specify which files "
+            "to fetch.\n\n"
+            "Example: 'backup fetch --type records entities --output-dir z:/backups/GCP'"
+        ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     fetch.add_argument(
@@ -129,18 +124,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     # print or save result
     output_format: _MutuallyExclusiveGroup = search.add_mutually_exclusive_group(required=True)
-    output_format.add_argument(
-        "--output-dir", type=str, help="Path to the output directory for resulting csv file(s)."
-    )
+    output_format.add_argument("--output-dir", type=str, help="Path to the output directory for resulting csv file(s).")
     output_format.add_argument(
         "--print",
         action="store_true",
         help="Print the results instead of saving to files",
     )
 
-    search.add_argument(
-        "--filestem", type=str, help="If saving to csv-files, optionally specify the filestem"
-    )
+    search.add_argument("--filestem", type=str, help="If saving to csv-files, optionally specify the filestem")
 
     search.add_argument(
         "--extra-field",
@@ -157,9 +148,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         help="Add one or more filters to limit the results",
     )
 
-    search.add_argument(
-        "--or_", action="store_true", help="Use OR between filters instead of default AND"
-    )
+    search.add_argument("--or_", action="store_true", help="Use OR between filters instead of default AND")
 
     args = parser.parse_args(argv)
 
@@ -174,7 +163,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     elif args.command == "fetch":
         if args.key:
-            os.environ["secret_key"] = args.key
+            os.environ["SECRET_KEY"] = args.key
 
         else:
             config_file: Path = Path.home() / ".backup.config"
@@ -185,19 +174,17 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     to_file: dict = {"secret_key": ""}
                     file.write(json.dumps(to_file))
             else:
-                with open(config_file, "r", encoding="utf-8", newline="\n") as file:
+                with open(config_file, encoding="utf-8", newline="\n") as file:
                     print("Loading secret key for fetch...")
                     content = file.read()
                     json_content: dict = json.loads(content)
                     if json_content.get("secret_key"):
-                        os.environ["secret_key"] = json_content["secret_key"]
+                        os.environ["SECRET_KEY"] = json_content["secret_key"]
                         print("Loaded: Secret key for fetch...ok.")
                     else:
                         sys.exit(f"No secret key specified in {config_file}")
 
         fetch_main(types=args.type, output_dir=args.fetch_output_dir)
-        pass
-
 
     if args.csv_path:
         input_csv = Path(args.csv_path)
@@ -205,9 +192,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if args.output_dir:
         output_dir = Path(args.output_dir)
 
-    filters: List[List[str]] = args.filter or []
-    extra_fields: List[str] = args.extra_field or []
-    header_print: List[str] = []
+    filters: list[list[str]] = args.filter or []
+    extra_fields: list[str] = args.extra_field or []
+    header_print: list[str] = []
 
     if extra_fields:
         header_print.append("id")
@@ -220,7 +207,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if not args.filter:
         sys.exit("At least one filter must be defined.")
 
-    if not input_csv.suffix == ".csv":
+    if input_csv.suffix != ".csv":
         sys.exit(f"Path to backup file does not point to a csv-file: {input_csv}")
 
     if not input_csv.exists():
@@ -238,7 +225,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         for row in csvReader:
             _dict: dict = json.loads(row["oasDictText"])
 
-            operators_results: List[bool] = []
+            operators_results: list[bool] = []
 
             for i in range(len(filters)):  # i is filter No.
                 fieldname: str = args.filter[i][0]
@@ -255,9 +242,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 fieldvalue: str = args.filter[i][2]
                 fieldvalue = fieldvalue.lower()
 
-                if fieldvalue == "null" and operator_key == "equalTo" and not _dict.get(fieldname):
-                    op_results = True
-                elif fieldvalue == "null" and operator_key == "notEqualTo" and _dict.get(fieldname):
+                if (fieldvalue == "null" and operator_key == "equalTo" and not _dict.get(fieldname)) or (
+                    fieldvalue == "null" and operator_key == "notEqualTo" and _dict.get(fieldname)
+                ):
                     op_results = True
                 elif not _dict.get(fieldname):
                     op_results = False
@@ -267,17 +254,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
                 operators_results.append(op_results)
 
-            if args.or_:
-                total_op_result = any(operators_results)
-            else:
-                total_op_result = all(operators_results)
+            total_op_result = any(operators_results) if args.or_ else all(operators_results)
 
             if not total_op_result:
                 continue
 
             id_ = row["id"]
-            header: List[str] = ["id"]
-            to_add: List[Any] = [id_]
+            header: list[str] = ["id"]
+            to_add: list[Any] = [id_]
 
             for field in extra_fields:
                 # header.append(field[0])
@@ -309,9 +293,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             with open(csv_out_path, "w", newline="", encoding="utf-8") as f:
                 write = csv.writer(f)
                 write.writerow(header)
-                write.writerows(
-                    output[i : i + max_file_size]
-                )  # writes data in blobs of max_file_size
+                write.writerows(output[i : i + max_file_size])  # writes data in blobs of max_file_size
                 count += 1
         print(f"Finished writing csv-files to output-dir: {output_dir}")
     return 0

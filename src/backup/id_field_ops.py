@@ -9,10 +9,7 @@ def regex(fieldname: str, pattern: str) -> bool:
 
     p = re.compile(pattern)
 
-    if p.findall(fieldname):
-        return True
-
-    return False
+    return bool(p.findall(fieldname))
 
 
 def id_field_contains(fieldname: str, content: str) -> bool:
