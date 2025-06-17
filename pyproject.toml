@@ -4,7 +4,7 @@ version = "0.7.0"
 description = ""
 authors = [{ name = "Aarhus Stadsarkiv", email = "stadsarkiv@aarhus.dk" }]
 requires-python = ">=3.12"
-readme = "README.md"
+readme = "readme.md"
 license = "GPL-3.0"
 include = [ "pyproject.toml",]
 dependencies = [
