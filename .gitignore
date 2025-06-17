@@ -13,3 +13,4 @@ results/
 .pytest_cache/
 .mypy_cache/
 new_version.py
+.env

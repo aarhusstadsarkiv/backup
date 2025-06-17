@@ -35,8 +35,6 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    # parser.add_argument("--version", action="version", version=get_version())
-    # parser.add_argument("--version", action="version", version=metadata.version("backupsearch"))
     parser.add_argument("--version", action="version", version=__version__)
 
     # subparsers
@@ -47,7 +45,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         # metavar="",
     )
 
-    # --------fetch---------------------------------------------------------------------------------
+    # fetch subcommand
     fetch = subs.add_parser(
         "fetch",
         help="Fetch backup-files from Google Cloud Platform",
@@ -68,9 +66,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         # action='append',
         type=str,
         help="",
-        choices=["records", "entities", "relations", "acquisitions"],
+        choices=["records", "entities", "relations", "acquisitions", "registrations", "updates"],
     )
-
     fetch.add_argument(
         "--key",
         metavar="secret_key",
@@ -78,14 +75,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         type=str,
         help="Key for fetching online data...",
     )
-
     fetch.add_argument(
         "--fetch-output-dir",
         metavar="fetch_output_dir_",
         type=Path,
         help="Specify path to csv output",
     )
-    # ----------------------------------------------------------------------------------------------
 
     # list subcommand
     subs.add_parser(
@@ -168,54 +163,41 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     args = parser.parse_args(argv)
 
-    # ----------------------------------------------------------------------------------------
+    if not args.command or args.command not in ["list", "search", "fetch"]:
+        sys.exit("You must use the 'list', 'search' or 'fetch' subcommand")
 
-    if args.command == "fetch" and args.key:
-        os.environ["secret_key"] = args.key
-    elif args.command == "fetch" and not args.key:
-        config_file: Path = Path.home() / ".backup.config"
-        if not config_file.exists() and args.command == "fetch":
-            print(f"Specify secret key in {config_file} to enable fetch...")
-            with open(config_file, "w", encoding="utf-8", newline="\n") as file:
-                to_file: dict = {"secret_key": ""}
-                file.write(json.dumps(to_file))
-        else:
-            with open(config_file, "r", encoding="utf-8", newline="\n") as file:
-                print("Loading secret key for fetch...")
-                content = file.read()
-                json_content: dict = json.loads(content)
-                if json_content.get("secret_key"):
-                    os.environ["secret_key"] = json_content["secret_key"]
-                    print("Loaded: Secret key for fetch...ok.")
-                else:
-                    sys.exit(f"No secret key specified in {config_file}")
-
-    # ----------------------------------------------------------------------------------------
-
-    if not args.command:
-        sys.exit("You must use the 'list' or 'search' subcommand")
-
-    elif args.command == "list":
+    if args.command == "list":
         for key in FIELDS_TRANSLATED.keys():
             print(key.ljust(25), end="")
             print(", ".join(FIELDS[FIELDS_TRANSLATED[key]].keys()))
         sys.exit(0)
 
-    # elif args.command != "search":
-    #     # SystemExit(0, "No such command")
-    #     sys.exit(f"Subcommand {args.command} does not exist.")
+    elif args.command == "fetch":
+        if args.key:
+            os.environ["secret_key"] = args.key
 
-    # --fetch-----------------------------------------------------------------------------------
+        else:
+            config_file: Path = Path.home() / ".backup.config"
 
-    if args.command == "fetch":
+            if not config_file.exists() and args.command == "fetch":
+                print(f"Specify secret key in {config_file} to enable fetch...")
+                with open(config_file, "w", encoding="utf-8", newline="\n") as file:
+                    to_file: dict = {"secret_key": ""}
+                    file.write(json.dumps(to_file))
+            else:
+                with open(config_file, "r", encoding="utf-8", newline="\n") as file:
+                    print("Loading secret key for fetch...")
+                    content = file.read()
+                    json_content: dict = json.loads(content)
+                    if json_content.get("secret_key"):
+                        os.environ["secret_key"] = json_content["secret_key"]
+                        print("Loaded: Secret key for fetch...ok.")
+                    else:
+                        sys.exit(f"No secret key specified in {config_file}")
+
         fetch_main(types=args.type, output_dir=args.fetch_output_dir)
         pass
 
-    # if not args.output_dir:
-    #     sys.exit("You must supply an `--output-dir`")
-    # if not Path(args.output_dir):
-    #     sys.exit(f"Unable to parse the supplied output-dir as a Path: {args.output_dir}")
-    # ------------------------------------------------------------------------------------------
 
     if args.csv_path:
         input_csv = Path(args.csv_path)
